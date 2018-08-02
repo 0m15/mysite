@@ -1,6 +1,5 @@
 import React from 'react'
 import Link from 'gatsby-link'
-import StackGrid from 'react-stack-grid'
 // import TypeHoverEffect from '../components/type-hover-effect'
 
 const IndexPage = () => (
@@ -24,7 +23,7 @@ const IndexPage = () => (
         </div>
       </div>
       <div className='w-50-ns'>
-        <h2 className='f2 mt2-ns normal fw3 mb1 lh1'>
+        <h2 className='f2 mt2-ns normal fw3 mb1 l'>
           <strong>contemporary</strong><br/>
           south italian<br/>
           fine dining<br/>

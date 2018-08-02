@@ -12,7 +12,6 @@
     "gatsby-transformer-remark": "^1.7.44",
     "gatsby-transformer-yaml": "^1.5.18",
     "react-helmet": "^5.2.0",
-    "react-stack-grid": "^0.7.1",
     "tachyons": "^4.11.1"
   },
   "keywords": [
