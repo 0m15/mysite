@@ -17,16 +17,27 @@ const Header = ({ siteTitle }) => (
         peschici<br/>
         </Link>
       </h1>
+      <div className='absolute left-0 w3 bt mb1 b--gray' style={{ top: 82 }} />
       <div className='ml-auto mt4 mt0-l'>
-        <ul className='flex-l flex-wrap-l list f7 ttu tracked'>
+        <ul className='flex-l flex-wrap-l list ttu tracked' style={{ fontSize: 11 }}>
           <li className='mr3-l mb0'>
             <Link to='ristorante'>
               il ristorante
             </Link>
           </li>
           <li className='mr3-l mb0'>
+            <Link to='domenico-cilenti'>
+              domenico cilenti
+            </Link>
+          </li>
+          <li className='mr3-l mb0'>
             <Link to='menu'>
               menu
+            </Link>
+          </li>
+          <li className='mr3-l mb0'>
+            <Link to='staff'>
+              staff
             </Link>
           </li>
           <li className='mr3-l mb0'>
@@ -39,7 +50,7 @@ const Header = ({ siteTitle }) => (
               dove siamo/contatti
             </Link>
           </li>
-          <li className='f7 gray ml5-l'>
+          <li className='gray ml5-l'>
             <Link to='/en'>
               english
             </Link>

@@ -8,13 +8,8 @@ import img3 from './3.jpg'
 const MenuPage = () => (
   <div>
     <div className='mw6-l center ph4'>
-    <h1 className='f1 normal mb3 absolute left-0 pl4-l ma0 pa0 lh-solid'
-            style={{
-                transform: 'rotate(90deg)',
-                transformOrigin: 'left',
-                marginLeft: '1em',
-                top: 40,
-            }}>
+        <h1 className='f1 normal mb3 absolute-l left-0 pl4-l ma0 pa0 lh-solid'
+            style={{ transform: 'rotate(90deg)' }}>
             Menù
         </h1>
         <p className='f6'>

@@ -8,7 +8,7 @@ import img3 from './3.jpg'
 
 const IndexPage = () => (
   <main>
-    <div className='flex-ns flex-wrap-ns ml-auto justify-end'>
+    <div className='flex-ns flex-wrap-ns ml-auto justify-end pl6-l'>
       <div className='w-50-ns tr-ns'>
         <img
           className='db w-60-ns ml-auto-ns mb2 mr2'
@@ -27,15 +27,18 @@ const IndexPage = () => (
         </div>
       </div>
       <div className='w-50-ns'>
-        <h2 className='f2 mt2-ns normal fw3 mb1 l'>
+        <h2 className='f3-ns f4 mt4-ns normal fw3 mb1 l'>
           <strong>contemporary</strong><br/>
           south italian<br/>
-          fine dining<br/>
-          restaurant
+          fine dining restaurant
         </h2>
         <img
           className=''
           src={img1} />
+
+        <Link>
+          Prenota un tavolo →
+        </Link>
       </div>
     </div>
   </main>
