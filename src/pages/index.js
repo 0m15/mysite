@@ -1,5 +1,9 @@
 import React from 'react'
 import Link from 'gatsby-link'
+import img0 from './0.jpg'
+import img1 from './1.jpg'
+import img2 from './2.jpg'
+import img3 from './3.jpg'
 // import TypeHoverEffect from '../components/type-hover-effect'
 
 const IndexPage = () => (
@@ -8,17 +12,17 @@ const IndexPage = () => (
       <div className='w-50-ns tr-ns'>
         <img
           className='db w-60-ns ml-auto-ns mb2 mr2'
-          src='photos/home/0570ba_d460eab1ee664134b5fd4b29c9cec7ba.jpg' />
+          src={img0} />
         <div className='flex flex-wrap'>
           <div className='w-50-ns'>
             <img
               className='mb2 pr2-ns'
-              src='photos/home/0570ba_0239cf9cc8124a8ab52a558124a5f545.jpg' />
+              src={img2} />
           </div>
           <div className='w-50-ns'>
             <img
               className='pr2-ns'
-              src='photos/ristorante/0570ba_020a32628f234242a14a968b84211fe5.jpg' />
+              src={img3} />
           </div>
         </div>
       </div>
@@ -31,7 +35,7 @@ const IndexPage = () => (
         </h2>
         <img
           className=''
-          src='photos/ristorante/0570ba_9a46ed36fd944845b2eb03004050961e.jpg' />
+          src={img1} />
       </div>
     </div>
   </main>
