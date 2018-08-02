@@ -1,6 +1,6 @@
 module.exports = {
   siteMetadata: {
-    title: 'simc',
+    title: 'domenico cilenti porta di basso - peschici gargano, italy',
   },
   plugins: [
     'gatsby-plugin-react-helmet',
@@ -20,12 +20,12 @@ module.exports = {
         path: `${__dirname}/src/`,
       },
     },
-    {
-      resolve: 'gatsby-plugin-i18n',
-      options: {        
-        langKeyDefault: 'it',
-        useLangKeyLayout: false,
-      }
-    }
+    // {
+    //   resolve: 'gatsby-plugin-i18n',
+    //   options: {        
+    //     langKeyDefault: 'it',
+    //     useLangKeyLayout: false,
+    //   }
+    // }
   ],
 }
