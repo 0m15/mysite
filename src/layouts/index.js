@@ -19,7 +19,7 @@ const Layout = ({ children, data }) => (
     <Header
       siteTitle={data.site.siteMetadata.title}
     />
-    <div className='center'>
+    <div className='center' style={{ minHeight: '40vh' }}>
       {children()}
     </div>
     <Footer

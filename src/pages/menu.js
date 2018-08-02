@@ -1,5 +1,6 @@
 import React from 'react'
 import Link from 'gatsby-link'
+import PageTitle from '../components/page-title'
 import img0 from './photos/ristorante/4.jpg'
 import img1 from './1.jpg'
 import img2 from './2.jpg'
@@ -7,22 +8,17 @@ import img3 from './3.jpg'
 
 const MenuPage = () => (
   <div>
-    <div className='mw6-l center ph4'>
-    <h1 className='f1 normal mb3 absolute left-0 pl4-l ma0 pa0 lh-solid'
-            style={{
-                transform: 'rotate(90deg)',
-                transformOrigin: 'left',
-                marginLeft: '1em',
-                top: 40,
-            }}>
-            Menù
-        </h1>
-        <p className='f6'>
+    <PageTitle title='menu' />
+    <div className='mw7-l center pl5 pr4'>
+        <p className='f3'>
             Al ristorante Porta di Basso, è nostro obiettivo concedere un'esperienza.
             Abbiamo scelto di servire un menu <i>à la carte</i> oppure tre diversi menù degustazione.<br/>
             Il menu delle bevande è stato curato per aggiungere una dimensione extra per ciascuna delle portate. In questo modo possiamo garantire ai nostri ospiti un'esperienza unica e precisa in ogni momento stagionale.
         </p>
-        <div className='pv3 f6'>
+    </div>
+    <div className='mw7-l center pl5 pr4'>
+        <div className='pv3 f5 mt4 mb4'>
+            <h2 className='f6 tracked ttu mb2'>I menu degustazione</h2>
             <div className='flex bb b--light-gray pv1'>
                 <div>Orti e Porti di Puglia</div>
                 <div className='ml-auto'>€40</div>
@@ -49,7 +45,7 @@ const MenuPage = () => (
             </li>
             <li className='ma0'>
                 <Link>
-                    Carta dei vini
+                    Vedi carta dei vini
                 </Link>
             </li>
         </ul>

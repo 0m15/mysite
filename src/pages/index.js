@@ -4,10 +4,12 @@ import img0 from './0.jpg'
 import img1 from './1.jpg'
 import img2 from './2.jpg'
 import img3 from './3.jpg'
-// import TypeHoverEffect from '../components/type-hover-effect'
+import PageTitle from '../components/page-title'
+import TypeHoverEffect from '../components/type-hover-effect'
 
 const IndexPage = () => (
   <main>
+    <PageTitle title='portadibasso' />
     <div className='flex-ns flex-wrap-ns ml-auto justify-end pl6-l'>
       <div className='w-50-ns tr-ns'>
         <img
@@ -27,7 +29,7 @@ const IndexPage = () => (
         </div>
       </div>
       <div className='w-50-ns'>
-        <h2 className='f3-ns f4 mt4-ns normal fw3 mb1 l'>
+        <h2 className='f3-ns f4 mt4-ns normal fw1 mb1 l'>
           <strong>contemporary</strong><br/>
           south italian<br/>
           fine dining restaurant
