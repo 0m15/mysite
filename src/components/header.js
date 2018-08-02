@@ -3,8 +3,8 @@ import Link from 'gatsby-link'
 
 const Header = ({ siteTitle }) => (
   <div className='pv4 mb5 ph4'>
-    <div className='mw6-m center'>
-      <h1 style={{ margin: 0, fontSize: '1em' }}>
+    <div className='center flex-l flex-wrap-l align-center'>
+      <h1 className='f7 w4'>
         <Link
           to="/"
           style={{
@@ -15,16 +15,37 @@ const Header = ({ siteTitle }) => (
         &nbsp;&nbsp;domenico cilenti<br/>
         <strong>portadibasso</strong><br/>
         peschici<br/>
-        &nbsp;&nbsp;south italian<br/>
-        <strong>fine dining</strong><br/>
-        &nbsp;&nbsp;restaurant
         </Link>
       </h1>
-    </div>
-    <div>
-      <Link to='/en'>
-        english
-      </Link>
+      <div className='ml-auto mt4 mt0-l'>
+        <ul className='flex-l flex-wrap-l list f7 ttu tracked'>
+          <li className='mr3-l mb0'>
+            <Link to='ristorante'>
+              il ristorante
+            </Link>
+          </li>
+          <li className='mr3-l mb0'>
+            <Link to='menu'>
+              menu
+            </Link>
+          </li>
+          <li className='mr3-l mb0'>
+            <Link to='about'>
+              prenotazioni
+            </Link>
+          </li>
+          <li>
+            <Link to='about'>
+              dove siamo/contatti
+            </Link>
+          </li>
+          <li className='f7 gray ml5-l'>
+            <Link to='/en'>
+              english
+            </Link>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 )
