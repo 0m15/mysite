@@ -1,10 +1,10 @@
 import React from 'react'
 import Link from 'gatsby-link'
 import PageTitle from '../components/page-title'
-import img0 from './photos/ristorante/4.jpg'
-import img1 from './1.jpg'
-import img2 from './2.jpg'
-import img3 from './3.jpg'
+import img0 from '../images/photos/ristorante/4.jpg'
+import img1 from '../images/photos/1.jpg'
+import img2 from '../images/photos/2.jpg'
+import img3 from '../images/photos/3.jpg'
 
 const MenuPage = () => (
   <div>
@@ -76,7 +76,7 @@ const MenuPage = () => (
       </div>
     </div>
     <div className='mw6-l center ph3'>
-        
+
     </div>
   </div>
 )

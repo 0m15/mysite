@@ -11,7 +11,9 @@
     "gatsby-source-filesystem": "^1.5.39",
     "gatsby-transformer-remark": "^1.7.44",
     "gatsby-transformer-yaml": "^1.5.18",
+    "intl": "^1.2.5",
     "react-helmet": "^5.2.0",
+    "react-intl": "^2.4.0",
     "tachyons": "^4.11.1"
   },
   "keywords": [

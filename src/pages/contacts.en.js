@@ -1,12 +1,12 @@
 import React from 'react'
 import Link from 'gatsby-link'
 import PageTitle from '../components/page-title'
-import map from './map.jpg'
+import map from '../images/map.jpg'
 
 const MenuPage = () => (
   <div>
     <PageTitle title='contatti' />
-    <main className='mw6 center pl5 pr4 fw2'>
+    <main className='mw7-l center pl5 pr4 fw2'>
         <p className='fw3 mb3 f3'>
             via cristoforo colombo, 38<br/>
             peschici - gargano, italy<br/>

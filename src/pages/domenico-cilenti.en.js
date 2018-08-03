@@ -1,11 +1,11 @@
 import React from 'react'
 import Link from 'gatsby-link'
 import PageTitle from '../components/page-title'
-import imgdc from './photos/domenico-cilenti/1.webp'
-import img0 from './photos/ristorante/4.jpg'
-import img1 from './1.jpg'
-import img2 from './2.jpg'
-import img3 from './3.jpg'
+import imgdc from '../images/photos/domenico-cilenti/1.webp'
+import img0 from '../images/photos/ristorante/4.jpg'
+import img1 from '../images/photos/1.jpg'
+import img2 from '../images/photos/2.jpg'
+import img3 from '../images/photos/3.jpg'
 
 const MenuPage = () => (
   <div>
@@ -13,10 +13,10 @@ const MenuPage = () => (
     <div className='mw7-l center pl5 pr4 mb4'>
       {/* <h2 className='ttu tracked f6 mb2'>il ristorante</h2> */}
       <p className='f3'>
-      Domenico Cilenti è executive chef, chef manager e patron del ristorante "Porta di Basso" in Peschici. 
+      Domenico Cilenti è executive chef, chef manager e patron del ristorante "Porta di Basso" in Peschici.
       </p>
     </div>
-    <div className='mw6-l center pl5 pr4'>
+    <div className='mw7-l center pl5 pr7-l pr5-m pr2'>
         <img
             className='pr2-ns absolute-l right-0-l w-25-l mt5-l'
             src={imgdc} />
