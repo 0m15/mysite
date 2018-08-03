@@ -44,7 +44,7 @@ const Header = ({ siteTitle, lang, messages }) => {
               </Link>
             </li>
             <li className='mr3-l mb0'>
-              <Link to={messages['restaurant']} activeClassName='bb bw1 fw7' exact>
+              <Link to={messages['prenotazioni']} activeClassName='bb bw1 fw7' exact>
                 <FormattedMessage id='prenotazioni' />
               </Link>
             </li>
