@@ -10,7 +10,6 @@ import 'tachyons'
 import './index.css'
 
 const Layout = ({ children, data, location, i18nMessages }) => {
-  console.log('i18nmessages', i18nMessages)
   const url = location.pathname
   const { langs, defaultLangKey } = data.site.siteMetadata.languages
   const langKey = getCurrentLangKey(langs, defaultLangKey, url)
@@ -25,7 +24,7 @@ const Layout = ({ children, data, location, i18nMessages }) => {
       <div
         className=''>
         <Helmet
-          title={data.site.siteMetadata.title}
+          title={'domenico cilenti porta di basso peschici'}
           meta={[
             { name: 'description', content: 'Sample' },
             { name: 'keywords', content: 'sample, something' },

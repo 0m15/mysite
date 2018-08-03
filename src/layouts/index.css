@@ -8,6 +8,10 @@ html {
 }
 body {
   margin: 0;
+  background-color: #F9FAEC;
+  color: #A56C2B !important;
+  /* background: #2D2420;
+  color: #fff !important; */
 }
 article,
 aside,

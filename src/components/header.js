@@ -1,13 +1,23 @@
 import React from 'react'
 import Link from 'gatsby-link'
 import { FormattedMessage } from 'react-intl'
+import logo from '../images/images/logo_01.png'
 
 const Header = ({ siteTitle, lang, messages }) => {
-  console.log('messages', messages);
+  const defaultLang = lang || 'it'
   return (
     <div className='pt4 pb4 mb5'>
       <div>
-        <h1 className='f7 pl4 w5 absolute'>
+        <Link
+          to={`/${lang}/`}
+          style={{
+            textDecoration: 'none',
+            fontWeight: 'normal',
+          }}
+        >
+          <img src={logo} width={140} className='absolute' style={{ top: 0, left: 20 }} />
+        </Link>
+        {/* <h1 className='f7 pl4 w5 absolute'>
           <Link
             to={`/${lang}/`}
             style={{
@@ -19,42 +29,63 @@ const Header = ({ siteTitle, lang, messages }) => {
           <strong>portadibasso</strong><br/>
           peschici
           </Link>
-        </h1>
-        <div className='absolute left-0 w3 bt mb1 b--gray' style={{ top: 82 }} />
+        </h1> */}
+        <div className='absolute left-0 w3 bt mb1' style={{ top: 82 }} />
         <div className='w100 ph4 tr ml-auto'>
           <ul className='flex-l flex-wrap-l justify-end list ml-auto f6'>
             <li className='mr3-l mb0'>
-              <Link to={messages['restaurant']} activeClassName='bb bw1 fw7' exact>
+              <Link
+                to={`/${lang}/${messages['restaurant']}`}
+                className='near-black'
+                activeClassName='bb bw1 fw7' exact>
                 <FormattedMessage id='restaurant' />
               </Link>
             </li>
             <li className='mr3-l mb0'>
-              <Link to='domenico-cilenti' activeClassName='bb bw1 fw7' exact>
+              <Link
+                to={`/${lang}/${messages['domenico cilenti'].replace(' ', '-')}`}
+                className='near-black'
+                activeClassName='bb bw1 fw7' exact>
                 <FormattedMessage id='domenico cilenti' />
               </Link>
             </li>
             <li className='mr3-l mb0'>
-              <Link to={messages['menu']} activeClassName='bb bw1 fw7' exact>
+              <Link
+                to={`/${lang}/${messages['menu']}`}
+                className='near-black'
+                activeClassName='bb bw1 fw7' exact>
                 <FormattedMessage id='menu' />
               </Link>
             </li>
             <li className='mr3-l mb0'>
-              <Link to={messages['staff']} activeClassName='bb bw1 fw7' exact>
+              <Link
+                to={`/${lang}/${messages['staff']}`}
+                className='near-black'
+                activeClassName='bb bw1 fw7' exact>
                 <FormattedMessage id='staff' />
               </Link>
             </li>
             <li className='mr3-l mb0'>
-              <Link to={messages['prenotazioni']} activeClassName='bb bw1 fw7' exact>
+              <Link
+                to={`/${lang}/${messages['prenotazioni']}`}
+                className='near-black'
+                activeClassName='bb bw1 fw7' exact>
                 <FormattedMessage id='prenotazioni' />
               </Link>
             </li>
             <li className='mr3-l mb0'>
-              <Link to={messages['eventi']} activeClassName='bb bw1 fw7' exact>
+              <Link
+                to={`/${lang}/${messages['eventi']}`}
+                className='near-black'
+                activeClassName='bb bw1 fw7' exact>
                 <FormattedMessage id='eventi' />
               </Link>
             </li>
             <li>
-              <Link to={messages['contatti']} activeClassName='bb bw1 fw7' exact>
+              <Link
+                to={`/${lang}/${messages['contatti']}`}
+                className='near-black'
+                activeClassName='bb bw1 fw7' exact>
                 <FormattedMessage id='contatti' />
               </Link>
             </li>

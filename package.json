@@ -5,13 +5,17 @@
   "author": "Kyle Mathews <mathews.kyle@gmail.com>",
   "dependencies": {
     "gatsby": "^1.9.247",
+    "gatsby-image": "^1.0.55",
     "gatsby-link": "^1.6.40",
     "gatsby-plugin-i18n": "^0.4.2",
     "gatsby-plugin-react-helmet": "^2.0.10",
+    "gatsby-plugin-sharp": "^1.6.48",
     "gatsby-source-filesystem": "^1.5.39",
     "gatsby-transformer-remark": "^1.7.44",
+    "gatsby-transformer-sharp": "^1.6.27",
     "gatsby-transformer-yaml": "^1.5.18",
     "intl": "^1.2.5",
+    "react-headroom": "^2.2.2",
     "react-helmet": "^5.2.0",
     "react-intl": "^2.4.0",
     "tachyons": "^4.11.1"

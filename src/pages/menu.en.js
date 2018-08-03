@@ -11,14 +11,14 @@ const MenuPage = () => (
     <PageTitle title='menu' />
     <div className='mw7-l center pl5 pr4'>
         <p className='f3'>
-            Al ristorante Porta di Basso, è nostro obiettivo concedere un'esperienza.
-            Abbiamo scelto di servire un menu <i>à la carte</i> oppure tre diversi menù degustazione.<br/>
-            Il menu delle bevande è stato curato per aggiungere una dimensione extra per ciascuna delle portate. In questo modo possiamo garantire ai nostri ospiti un'esperienza unica e precisa in ogni momento stagionale.
+          At the Porta di Basso restaurant, it is our goal to grant an experience.<br/>
+          We have chosen to serve an à la carte menu or three different tasting menus.<br/>
+          The beverage menu has been designed to add an extra dimension to each course. In this way we can guarantee our guests a unique and precise experience at any time of the season.
         </p>
     </div>
     <div className='mw7-l center pl5 pr4'>
         <div className='pv3 f5 mt4 mb4'>
-            <h2 className='f6 tracked ttu mb2'>I menu degustazione</h2>
+            <h2 className='f6 tracked ttu mb2'>tasting menus</h2>
             <div className='flex bb b--light-gray pv1'>
                 <div>Orti e Porti di Puglia</div>
                 <div className='ml-auto'>€40</div>
@@ -35,21 +35,23 @@ const MenuPage = () => (
         <ul className='list f6'>
             <li className='ma0'>
                 <Link>
-                    Prenota un tavolo →
+                    Reserve a table →
                 </Link>
             </li>
             <li className='ma0'>
                 <Link>
-                    Visualizza il Menu in PDF
+                    View PDF Menu
                 </Link>
             </li>
             <li className='ma0'>
                 <Link>
-                    Vedi carta dei vini
+                    View wine list
                 </Link>
             </li>
         </ul>
-        <p className='f7 mv4 gray italic'><i>Per godere appieno questa esperienza, consigliamo di dedicarsi una serata intera.</i></p>
+        <p className='f7 mv4 gray i'>
+          To fully enjoy this experience, we recommend an entire evening.
+        </p>
     </div>
     <div className='flex-ns flex-wrap-ns justify-start pl6-l mv3 ml-auto'>
       <div className='w-50-ns tr-ns'>

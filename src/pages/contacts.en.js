@@ -5,7 +5,7 @@ import map from '../images/map.jpg'
 
 const MenuPage = () => (
   <div>
-    <PageTitle title='contatti' />
+    <PageTitle title='contacts' />
     <main className='mw7-l center pl5 pr4 fw2'>
         <p className='fw3 mb3 f3'>
             via cristoforo colombo, 38<br/>

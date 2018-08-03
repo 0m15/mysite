@@ -30,7 +30,7 @@ const MenuPage = () => (
             I menu degustazione di Domenico sono composti da più 20 portate. Prendono la tradizione culinaria del sud Italia, riportandola all'essenziale per poi ricomporla in una narrativa completamente nuova. Una sosta al ristorante "Porta di Basso" trasporterà gli ospiti in un tour culinario mozzafiato del Gargano, viaggiando tra i climi miti ed assolati dell'unica punta del litorale adriatico, caratterizzato dal pescato e i suoi riflessi, dal colore più caldo della Foresta Umbra, una delle più vecchie e selvaggie riserve naturali d'Italia fin attraverso il Lago di Varano e la sua peculiare tradizione di pesca.
             Tutto questo, come i sapori di Domenico, sono presenti nei piatti del "Porta di Basso"
         </p>
-        <ul className='list f6'>
+        <ul className='list f6 mt4'>
             <li className='ma0'>
                 <Link>
                     Bio PDF →

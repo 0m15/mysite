@@ -12,7 +12,7 @@ import img3 from '../images/photos/3.jpg'
 
 const MenuPage = () => (
   <div>
-    <PageTitle title='ristorante' />
+    <PageTitle title='restaurant' />
     <div className='mw7-l center pl5 pr4'>
       {/* <h2 className='ttu tracked f6 mb2'>il ristorante</h2> */}
       <p className='f3'>
