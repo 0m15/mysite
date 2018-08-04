@@ -6,92 +6,54 @@ import logo from '../images/images/logo_01.png'
 const Header = ({ siteTitle, lang, messages }) => {
   const defaultLang = lang || 'it'
   return (
-    <div className='pt4 pb4 mb5'>
-      <div>
-        <Link
-          to={`/${lang}/`}
-          style={{
-            textDecoration: 'none',
-            fontWeight: 'normal',
-          }}
-        >
-          <img src={logo} width={140} className='absolute' style={{ top: 0, left: 20 }} />
-        </Link>
-        {/* <h1 className='f7 pl4 w5 absolute'>
-          <Link
-            to={`/${lang}/`}
-            style={{
-              textDecoration: 'none',
-              fontWeight: 'normal',
-            }}
+    <div className='fixed w-100 pt4 pb4 center pl3 pl4 z-999'>
+      <div className='flex items-start'>
+        <h1 className='f6 w5 ma0'>
+          <Link to={`/`} className='near-black'
           >
-          &nbsp;&nbsp;domenico cilenti<br/>
-          <strong>portadibasso</strong><br/>
-          peschici
+            simc
           </Link>
-        </h1> */}
-        <div className='absolute left-0 w3 bt mb1' style={{ top: 82 }} />
-        <div className='w100 ph4 tr ml-auto'>
+        </h1>
+        <div className='w100 tr ml-auto pr4 pr5-l'>
           <ul className='flex-l flex-wrap-l justify-end list ml-auto f6'>
             <li className='mr3-l mb0'>
               <Link
-                to={`/${lang}/${messages['restaurant']}`}
-                className='near-black'
+                to={'/'}
+                className=''
                 activeClassName='bb bw1 fw7' exact>
-                <FormattedMessage id='restaurant' />
+                home
               </Link>
             </li>
             <li className='mr3-l mb0'>
               <Link
-                to={`/${lang}/${messages['domenico cilenti'].replace(' ', '-')}`}
-                className='near-black'
+                to={`/about`}
+                className=''
                 activeClassName='bb bw1 fw7' exact>
-                <FormattedMessage id='domenico cilenti' />
+                about
               </Link>
             </li>
             <li className='mr3-l mb0'>
               <Link
-                to={`/${lang}/${messages['menu']}`}
-                className='near-black'
+                to={'/works'}
+                className=''
                 activeClassName='bb bw1 fw7' exact>
-                <FormattedMessage id='menu' />
+                works
               </Link>
             </li>
-            <li className='mr3-l mb0'>
+            {/* <li className='mr3-l mb0'>
               <Link
-                to={`/${lang}/${messages['staff']}`}
-                className='near-black'
+                to={`/blog`}
+                className=''
                 activeClassName='bb bw1 fw7' exact>
-                <FormattedMessage id='staff' />
+                blog
               </Link>
-            </li>
-            <li className='mr3-l mb0'>
-              <Link
-                to={`/${lang}/${messages['prenotazioni']}`}
-                className='near-black'
-                activeClassName='bb bw1 fw7' exact>
-                <FormattedMessage id='prenotazioni' />
-              </Link>
-            </li>
-            <li className='mr3-l mb0'>
-              <Link
-                to={`/${lang}/${messages['eventi']}`}
-                className='near-black'
-                activeClassName='bb bw1 fw7' exact>
-                <FormattedMessage id='eventi' />
-              </Link>
-            </li>
+            </li> */}
             <li>
               <Link
-                to={`/${lang}/${messages['contatti']}`}
-                className='near-black'
+                to={`/contacts`}
+                className=''
                 activeClassName='bb bw1 fw7' exact>
-                <FormattedMessage id='contatti' />
-              </Link>
-            </li>
-            <li className='gray ml5-l'>
-              <Link to={lang === 'en' ? '/it/' : '/en/'}>
-                <FormattedMessage id='english' />
+                contacts
               </Link>
             </li>
           </ul>

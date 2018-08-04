@@ -7,15 +7,14 @@ const Page = ({
     links,
     children,
 }) => (
-    <h1 className='f1 normal mb3 fixed left-0 pl5 ml3 ma0 pa0 lh-solid'
-        style={{
-            transform: 'rotate(90deg)',
-            transformOrigin: 'left',
-            top: 40,
-            whiteSpace: 'nowrap',
-            fontSize: '5em',
-        }}>
-        {title}
+    <h1
+      style={{
+        // fontSize: '15em',
+        // zIndex: -1,
+        // whiteSpace: 'nowrap',
+      }}
+      className='f1 tc mt6 mb7 lh-solid fw8 pa0'>
+        {title}.
     </h1>
 )
 

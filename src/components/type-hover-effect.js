@@ -8,13 +8,13 @@ class TypeHoverEffect extends React.Component {
 
   static defaultProps = {
     styleStack: [
-      {fontFamily: 'Helvetica Neue', fontWeight: 100, fontStyle: 'normal' },
-      {fontFamily: 'Helvetica Neue', fontWeight: 400, fontStyle: 'normal' },
-      {fontFamily: 'Helvetica Neue', fontWeight: 900, fontStyle: 'italic' },
-      {fontFamily: 'Helvetica Neue', fontWeight: 200, fontStyle: 'normal' },
-      {fontFamily: 'Helvetica Neue', fontWeight: 900, fontStyle: 'normal' },
-      {fontFamily: 'Helvetica Neue', fontWeight: 300, fontStyle: 'italic' },
-      {fontFamily: 'Helvetica Neue', fontWeight: 900, fontStyle: 'normal' },
+      {fontFamily: 'Space Mono', fontWeight: 100, fontStyle: 'normal' },
+      {fontFamily: 'Space Mono', fontWeight: 400, fontStyle: 'normal' },
+      {fontFamily: 'Space Mono', fontWeight: 900, fontStyle: 'italic' },
+      {fontFamily: 'Space Mono', fontWeight: 200, fontStyle: 'normal' },
+      {fontFamily: 'Space Mono', fontWeight: 900, fontStyle: 'normal' },
+      {fontFamily: 'Space Mono', fontWeight: 300, fontStyle: 'italic' },
+      {fontFamily: 'Space Mono', fontWeight: 900, fontStyle: 'normal' },
     ],
     fps: 2,
   }

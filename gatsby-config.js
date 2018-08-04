@@ -1,11 +1,9 @@
-const languages = require('./data/languages')
-
 module.exports = {
   siteMetadata: {
-    title: 'domenico cilenti porta di basso - peschici gargano, italy',
-    languages,
+    title: 'domenico cilenti porta di basso - peschici gargano, italy'
   },
   plugins: [
+    'gatsby-plugin-react-next',
     'gatsby-plugin-react-helmet',
     'gatsby-transformer-yaml',
     'gatsby-transformer-remark',
@@ -25,13 +23,5 @@ module.exports = {
     },
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
-    {
-      resolve: 'gatsby-plugin-i18n',
-      options: {
-        langKeyForNull: 'any',
-        langKeyDefault: 'it',
-        useLangKeyLayout: true,
-      }
-    }
   ],
 }
