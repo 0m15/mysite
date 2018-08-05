@@ -15,14 +15,9 @@ const Footer = (props) => (
       <div className='ml-auto mt4 mt0-l'>
         <ul className='flex-l flex-wrap-l list f7 ttu tracked'>
           <li className='mr3-l mb0'>
-            <Link to='ristorante'>
+            <a href='https://www.behance.net/ffeuer'>
               behance
-            </Link>
-          </li>
-          <li className='mr3-l mb0'>
-            <Link to='menu'>
-              instagram
-            </Link>
+            </a>
           </li>
           <li>
             <a href='mailto:simonecarella@gmail.com'>
