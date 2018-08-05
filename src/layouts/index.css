@@ -218,7 +218,11 @@ body {
   /* overflow: hidden; */
 }
 
- {}
+
+
+* {
+  cursor: none;
+}
 /*
 h1,
 h2,

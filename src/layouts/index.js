@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
 import Header from '../components/header'
 import Footer from '../components/footer'
+import Cursor from '../components/cursor'
 import 'tachyons'
 import './index.css'
 
@@ -18,6 +19,7 @@ const Layout = ({ children, data }) => {
             { name: 'keywords', content: 'sample, something' },
           ]}
         />
+        <Cursor />
         <Header
           siteTitle={'simc'}
         />
