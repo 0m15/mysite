@@ -47,8 +47,9 @@ module.exports = {
         // icon: "src/images/icon.png", // This path is relative to the root of the site.
       },
     },
-    `gatsby-plugin-offline`,
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
+    `gatsby-plugin-netlify`,
+    `gatsby-plugin-offline`,
   ],
 }

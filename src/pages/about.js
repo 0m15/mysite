@@ -13,11 +13,11 @@ const MenuPage = () => (
       pages={2}
       // scrolling={false}
     >
-      <ParallaxLayer speed={0.7} offset={0.25}>
+      <ParallaxLayer speed={0.5} offset={0.25}>
         <PageTitle title="about" />
       </ParallaxLayer>
-      <ParallaxLayer offset={1.05} speed={0.1} >
-        <div className="mw7 center pl4 pr4">
+      <ParallaxLayer offset={1.05} speed={0.2} >
+        <div className="mw7 center pl6pr4">
         {/* <img
             className='pr2-ns absolute-l right-0-l w-25-l mt0-l'
             src={imgdc} /> */}
