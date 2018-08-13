@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Work+Sans:300,400,600');
+@import url('https://fonts.googleapis.com/css?family=Amiri|Stardos+Stencil');
 
 article,
 aside,
@@ -261,4 +261,13 @@ ol {
   body {
     font-size: 90%;
   }
+}
+
+.serif {
+  font-family: Butler Stencil;
+  font-weight: 200;
+}
+
+.f1 {
+  font-size: 3em;
 }

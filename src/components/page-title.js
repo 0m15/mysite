@@ -14,7 +14,10 @@ const Page = ({
         // whiteSpace: 'nowrap',
       }}
       className='f1 tc mt6 mb7 lh-solid fw8 pa0'>
-        {title}.
+        {title}.<br/>
+        <span>
+
+        </span>
     </h1>
 )
 

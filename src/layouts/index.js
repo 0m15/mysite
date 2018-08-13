@@ -20,15 +20,15 @@ const Layout = ({ children, data }) => {
           ]}
         />
         <Cursor />
-        <Header
+        {/* <Header
           siteTitle={'simc'}
-        />
-        <main style={{ minHeight: '100vh' }}>
+        /> */}
+        <main style={{ height: '100vh' }}>
           {children()}
         </main>
-        <Footer
+        {/* <Footer
           siteTitle={'simc'}
-        />
+        /> */}
       </div>
   )
 }

@@ -12,51 +12,18 @@ import { Parallax, ParallaxLayer } from 'react-spring'
 const IndexPage = ({ data }) => {
   console.log('data', data);
   return (
-    <div>
-    <Parallax pages={2} style={{
-      top: 0,
+    <div className='mw7 center h-100 flex flex-column justify-center ph4 ph5-l' style={{
     }}>
-      <div className='flex-ns flex-wrap-ns justify-start mw8 center'>
-      <ParallaxLayer offset={0.72} speed={0.5}>
-        <div className='w-33-ns tr-ns'>
-          <Img
-            sizes={data.img0.sizes}
-            className='db w-60-ns ml-auto-ns mb3 mr3' />
-          <div className='flex flex-wrap'>
-            <div className='w-50-ns'>
-              <Img
-                sizes={data.img2.sizes}
-                className='mb2 mr3-ns' />
-            </div>
-            <div className='w-50-ns'>
-              <Img
-                sizes={data.img3.sizes}
-                className='mr3-ns' />
-            </div>
-          </div>
-        </div>
-      </ParallaxLayer>
-      <ParallaxLayer offset={0.5} speed={0.2} className='w-50-ns ml-auto' style={{ marginLeft: '33%'}}>
-        <div className='w-50-ns'>
-          <h2 className='f2-ns mt4-ns fw9 fw1 mb1 lh-title'>
-            <strong>visual & digital designer</strong><br/>
-            front end developer<br/>
-          </h2>
-          <Img
-            sizes={data.img1.sizes}
-            className='' />
-        </div>
-      </ParallaxLayer>
-      <ParallaxLayer offset={1.5} speed={0.7} className='w-50-ns ml-auto' style={{ marginLeft: '50%'}}>
-        <div className='w-50-ns'>
-        <h2 className='f3-ns f4 mt4-ns mb1 fw2 l'>
-          <strong className='fw8'>contact me</strong><br/>
-          simonecarella@gmail.com<br/>
+        <h1 className='ma0 serif f1 fw1 lh-title'>
+          Simone Carella<br/>
+        </h1>
+        <h2 className='ma0 pa0 serif f2 pb4 fw1 lh-title'>
+          graphic designer, visual e digital designer.
         </h2>
-        </div>
-      </ParallaxLayer>
-      </div>
-    </Parallax>
+        <p className='ma0 pa0 serif f2 fw1 lh-solid'>
+          +39 328 60 49 566<br/>
+          simonecarella@gmail.com<br/>
+        </p>
     </div>
   )
 }
