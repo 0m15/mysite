@@ -34,7 +34,6 @@ class Cursor extends React.Component {
     const {
       x, y
     } = this.state
-    console.log('x', x)
     return (
       <div style={{ position: 'absolute', zIndex: 9999 }}>
         <div
