@@ -1,40 +1,32 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+// import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
-import Header from '../components/header'
-import Footer from '../components/footer'
-import Cursor from '../components/cursor'
-import 'tachyons'
-import './index.css'
+import './index.scss'
 
 const Layout = ({ children, data }) => {
   return (
-      <div style={{
-        minHeight: '100vh',
-      }}>
-        <Helmet
-          title={'simonecarella'}
-          meta={[
-            { name: 'description', content: 'Sample' },
-            { name: 'keywords', content: 'sample, something' },
-          ]}
-        />
-        <Cursor />
-        {/* <Header
+    <div style={{
+      minHeight: '100vh',
+    }}>
+      <Helmet
+        title={'simonecarella'}
+        meta={[
+          { name: 'description', content: 'Sample' },
+          { name: 'keywords', content: 'sample, something' },
+        ]}
+      />
+      {/* <Cursor /> */}
+      {/* <Header
           siteTitle={'simc'}
         /> */}
-        <main style={{ height: '100vh' }}>
-          {children()}
-        </main>
-        {/* <Footer
+      <main style={{ height: '100vh' }}>
+        {children}
+      </main>
+      {/* <Footer
           siteTitle={'simc'}
         /> */}
-      </div>
+    </div>
   )
-}
-
-Layout.propTypes = {
-  children: PropTypes.func,
 }
 
 export default Layout

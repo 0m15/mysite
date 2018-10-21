@@ -54,8 +54,8 @@ class Cursor extends React.Component {
   animateLetter = (letter, i, delay) => {
     if (!letter) return
     const time = new Date().getTime() * 0.0008 // + (Math.random() * 0.1)
-    const blur = Math.sin(time - delay) * 2 + 2
-    letter.style.opacity = Math.sin(time - delay) * 1 + 2
+    const blur = Math.sin(time - delay) * 4 + 4
+    // letter.style.opacity = Math.sin(time - delay) * 1 + 1.5
     letter.style.filter = `blur(${blur}px)`
     requestAnimationFrame(() => {
       this.animateLetter(letter, i, delay)

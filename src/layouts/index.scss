@@ -1,0 +1,9 @@
+@import './variables.scss';
+@import '~tachyons-sass/tachyons.scss';
+
+html,
+body {
+    overflow: hidden;
+    font-family: $sans-serif;
+    cursor: none;
+}

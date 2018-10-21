@@ -7,10 +7,7 @@ const SIZE = 24
 const INNER_SIZE = 10
 
 class Cursor extends React.Component {
-  static propTypes = {
-
-  }
-
+  static propTypes = {}
   static defaultProps = {}
 
   constructor(props) {
@@ -47,6 +44,7 @@ class Cursor extends React.Component {
             pointerEvents: 'none',
             mixBlendMode: 'difference',
             zIndex: 9999,
+            backgroundBlendMode: 'exclusion',
             // transform: `translate3d(${this.x}px, ${this.y}px, 0)`,
           }}
         />
@@ -64,11 +62,11 @@ class Cursor extends React.Component {
               { translateX: x, },
               { translateY: y, }
             ],
-            mixBlendMode: 'difference',
             // left: x,
             // top: y,
           }}
-        />
+        >
+        </Animated.div>
       </div>
     )
   }
