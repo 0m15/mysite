@@ -1,7 +1,7 @@
 module.exports = {
   siteMetadata: {
-    title: 'More in Common',
-    siteUrl: 'http://www.hiddentribes.us',
+    title: 'simone carella',
+    siteUrl: '',
   },
   plugins: [
     // 'gatsby-plugin-react-next',
@@ -87,18 +87,18 @@ module.exports = {
       },
     },
     // 'gatsby-plugin-offline',
-    {
-      resolve: 'gatsby-plugin-sitemap',
-      options: {
-        serialize: ({ site, allSitePage }) =>
-          allSitePage.edges.map(edge => {
-            return {  
-              url: site.siteMetadata.siteUrl + edge.node.path,
-              changefreq: `monthly`,
-              priority: 0.7,
-            }
-          }),
-      },
-    },
+    // {
+    //   resolve: 'gatsby-plugin-sitemap',
+    //   options: {
+    //     serialize: ({ site, allSitePage }) =>
+    //       allSitePage.edges.map(edge => {
+    //         return {  
+    //           url: site.siteMetadata.siteUrl + edge.node.path,
+    //           changefreq: `monthly`,
+    //           priority: 0.7,
+    //         }
+    //       }),
+    //   },
+    // },
   ],
 }

@@ -1,5 +1,5 @@
 import React from 'react'
-import { TimelineLite, TweenLite, TweenMax, Elastic, Back } from 'gsap/all'
+import { TimelineLite, TweenLite, TweenMax, Elastic, Back } from 'gsap'
 import img0 from '../images/ht.gif'
 import img1 from '../images/celli.gif'
 import img2 from '../images/ims.jpg'
