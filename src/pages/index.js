@@ -4,6 +4,7 @@ import img0 from '../images/ht.gif'
 import img1 from '../images/celli.gif'
 import img2 from '../images/ims.jpg'
 import img3 from '../images/songul.jpg'
+import img4 from '../images/rebr.png'
 
 const CURSOR_SIZE = 32
 
@@ -27,10 +28,10 @@ const works = [
     img: img2,
   },
   {
-    title: 'Musixmatch',
+    title: 'Rebrandly',
     at: 'Musixmatch',
     for: 'Musixmatch',
-    img: img1,
+    img: img4,
   },
   {
     title: 'Graphic Design',
@@ -121,14 +122,15 @@ class IndexPage extends React.Component {
             ease: Elastic.easeOut,
           }).play()
           TweenLite.to(this.detailNode, 0.5, {
-            y: mouseY + 200,
-            x: -200 + (-0.5 + (this.cursor.x / window.innerHeight)) * 30,
+            y: evt.clientY - 100,
+            // x: -200 + (-0.5 + (this.cursor.x / window.innerHeight)) * 30,
             x: -600,
             opacity: 1,
             z: -1,
           }).play()
           TweenLite.to(this.scrollerNode, 1.5, {
-            y: -((mouseY - 100) / (this.node.clientHeight - 150)) * this.scrollerNode.clientHeight,
+            //y: -((mouseY - 100) / (this.node.clientHeight - 150)) * this.scrollerNode.clientHeight,
+            y: -((mouseY - 40) / (this.node.clientHeight - 40)) * this.scrollerNode.clientHeight,
             ease: Elastic.easeOut,
           })
           this.setState({
@@ -153,27 +155,27 @@ class IndexPage extends React.Component {
             simone carella<br/>
             <span className="fw1">digital designer/coder</span>
           </h1>
-          <p className="f6 pt6 pb3 light-silver">
+          {/* <p className="f6 pt6 pb3 light-silver">
             Projects and works
             <br />
             2014—2018
-          </p>
+          </p> */}
           <div
             ref={el => (this.node = el)}
-            className="relative z-999 pv5"
+            className="relative pv3 mt5 z-999"
             onMouseEnter={this.mouseEnterNode}
             onMouseLeave={this.mouseLeaveNode}
           >
             {works.map((work, i) => {
               return (
                 <article
-                  className="f2 mb3 fw8"
+                  className="f2 mv4 fw8"
                   ref={this.getRef(i)}
                   key={i}
                   style={{}}
                 >
                   <h2
-                    className="f2"
+                    className="f2 ma0 pa0"
                   >
                     {work.title}
                   </h2>
