@@ -127,9 +127,9 @@ class IndexPage extends React.Component {
             opacity: 1,
             z: -1,
           }).play()
-          TweenLite.to(this.scrollerNode, 1, {
+          TweenLite.to(this.scrollerNode, 1.5, {
             y: -((mouseY - 100) / (this.node.clientHeight - 150)) * this.scrollerNode.clientHeight,
-            ease: Back.easeOut,
+            ease: Elastic.easeOut,
           })
           this.setState({
             index: i,
