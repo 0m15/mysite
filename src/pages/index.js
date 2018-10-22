@@ -34,7 +34,7 @@ const works = [
     img: img4,
   },
   {
-    title: 'Graphic Design',
+    title: 'Misc',
     at: 'Musixmatch',
     for: 'Musixmatch',
     img: img3,
@@ -110,7 +110,6 @@ class IndexPage extends React.Component {
 
   mousemove = evt => {
     const mouseY = evt.clientY - this.node.offsetTop - CURSOR_SIZE / 2
-    console.log((mouseY / this.node.clientHeight) )
     requestAnimationFrame(() => {
       this.nodes.forEach((node, i) => {
         const d = Math.sqrt(Math.pow(mouseY - node.offsetTop, 2))
@@ -120,6 +119,7 @@ class IndexPage extends React.Component {
             y: (mouseY - node.offsetTop) * r,
             opacity: 1,
             ease: Elastic.easeOut,
+            color: '#fff',
           }).play()
           TweenLite.to(this.detailNode, 0.5, {
             y: evt.clientY - 100,
@@ -132,15 +132,14 @@ class IndexPage extends React.Component {
             //y: -((mouseY - 100) / (this.node.clientHeight - 150)) * this.scrollerNode.clientHeight,
             y: -((mouseY - 40) / (this.node.clientHeight - 40)) * this.scrollerNode.clientHeight,
             ease: Elastic.easeOut,
-          })
-          this.setState({
-            index: i,
+            
           })
         } else {
           TweenLite.to(node, 1, {
             y: 0,
             opacity: 0.6,
             ease: Elastic.easeOut,
+            color: 'black',
           }).play()
         }
       })
@@ -176,6 +175,9 @@ class IndexPage extends React.Component {
                 >
                   <h2
                     className="f2 ma0 pa0"
+                    style={{
+                      mixBlendMode: 'difference',
+                    }}
                   >
                     {work.title}
                   </h2>
