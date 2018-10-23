@@ -345,7 +345,6 @@ export default ({ children, ...rest }) => (
     query={graphql`
       query works {
         allMarkdownRemark(
-          sort: { fields: [frontmatter___order], order: ASC }
           filter: { fileAbsolutePath: { regex: "/works/" } }
         ) {
           edges {
