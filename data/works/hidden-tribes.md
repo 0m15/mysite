@@ -9,7 +9,7 @@ images:
 
 ---
 
-More in Common is a new international initiative, set up in 2017 to build communities and societies that are stronger, more united and more resilient to the increasing threats of polarisation and social division.
+The Hidden Tribes of America is a year-long project launched by More in Common in late 2018 to better understand the forces that drive political polarization and tribalism in the United States today, and to galvanize efforts to address them.
 
 <br/>
 

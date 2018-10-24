@@ -6,7 +6,6 @@ import Slideshow from '../components/slideshow'
 
 const CURSOR_SIZE = 32
 
-
 class IndexPage extends React.Component {
   state = {
     index: undefined,
@@ -136,6 +135,7 @@ class IndexPage extends React.Component {
   selectWork = (index, cb) => {
     const node = this.nodes[index]
     const detailNode = this.detailNodes[index]
+    const workDescription = node.querySelector('.work-descr')
     this.currentIndex = index
     this.detailOpen = true
     this.node.removeEventListener('mousemove', this.mousemove, {
@@ -148,12 +148,14 @@ class IndexPage extends React.Component {
       //   background: works[index].background || '#000',
       // })
       // fade out nodes
+      .set(workDescription.querySelectorAll('.work-info'), { y: -20 })
+      .to(this.scrollerNode, 0.1, { y: -index * 200 }, "-=0.1")
       .staggerTo(
         this.nodes.filter((n, i) => i !== index),
         1.0,
         { opacity: 0, y: -10, pointerEvents: 'none', ease: Back.easeOut },
-        0.15
-        // "-=0.5"
+        0.15,
+        "-=0.1"
       )
       // fade out detail nodes
       .to(
@@ -163,14 +165,7 @@ class IndexPage extends React.Component {
         0.1,
         '-=0.5'
       )
-      // move node container to the top
-      // .to(
-      //   this.node,
-      //   0.5,
-      //   { y: -node.offsetTop, ease: Back.easeOut },
-      //   '-=0.75'
-      // )
-      // move current node to the top
+      // move current node to the bottom
       .to(
         node,
         1.5,
@@ -178,7 +173,7 @@ class IndexPage extends React.Component {
           y: -node.offsetTop + 400,
           height: 'auto',
           color: '#fff',
-          ease: Back.easeOut,
+          // ease: Back.easeOut,
         },
         '-=0.75'
       )
@@ -186,7 +181,7 @@ class IndexPage extends React.Component {
       .to(
         this.detailNode,
         0.5,
-        { y: 200, height: 380, ease: Back.easeOut, overflow: 'visible' },
+        { y: 120, height: 380, ease: Back.easeOut, overflow: 'visible' },
         // { y: 200, ease: Back.easeOut },
         '-=1.25'
       )
@@ -210,24 +205,26 @@ class IndexPage extends React.Component {
         },
         '-=1.25'
       )
-      // .set(this.cursorNode, { opacity: 0, scale: 1 })
       .to(this.cursorNode, 0, {
         scale: 1,
         background: '#fff',
       })
-      // .to(node, 0, { overflow: 'inherit' })
       .to(
-        node.querySelector('.work-descr'),
+        workDescription,
         0.5,
         {
-          opacity: 1,
           height: 'auto',
-          y: -10,
+          y: 0,
+          opacity: 1,
         },
         '-=0.75'
       )
+      .staggerTo(workDescription.querySelectorAll('.work-info'), 1.0, {
+        opacity: 1,
+        y: 0,
+      }, 0.5, '-=1.5')
       .play()
-      return this.timeline2
+    return this.timeline2
   }
 
   onClickWork = index => evt => {
@@ -254,7 +251,10 @@ class IndexPage extends React.Component {
       <>
         <div className="mw8 center relative">
           <div className="ph5">
-            <h1 className="f6 ma0 pa0 pt5 relative z-9999 no-cursor" onClick={this.exitWork}>
+            <h1
+              className="f6 ma0 pa0 pt5 relative z-9999 no-cursor"
+              onClick={this.exitWork}
+            >
               simone carella
               <br />
               <span className="fw1">digital designer/coder</span>
@@ -274,8 +274,7 @@ class IndexPage extends React.Component {
                 cursor: 'none',
               }}
             >
-              {works
-                .map(({ node: work }, i) => {
+              {works.map(({ node: work }, i) => {
                 return (
                   <article
                     className="mv4 fw8"
@@ -289,23 +288,29 @@ class IndexPage extends React.Component {
                   >
                     <h2 className="f2 ma0 pa0">{work.frontmatter.title}</h2>
                     <div
-                      className="work-descr mt4 w-100"
+                      className="work-descr mt4 w-100 flex justify-between"
                       style={{ opacity: 0, height: 0 }}
                     >
                       <p
-                        className="mw7 ma0 pa0 lh-copy fw4 f6 white"
-                        style={{
-                          columns: 2,
-                        }}
+                        className="mw7 ma0 pa0 lh-copy fw4 f6 w-30 work-info"
+                        style={{ opacity: 0 }}
                       >
                         {work.excerpt}
                       </p>
-                      {
-                        work.frontmatter.url &&
-                          <div className="mt4 tr">
-                            <a className="white fw7" href={work.frontmatter.url}>View project</a>
-                          </div>
-                      }
+                      <div className="f6 w-30 work-info" style={{ opacity: 0 }}>
+                      <p
+                        className="mw7 ma0 pa0 lh-copy fw4 f6"
+                      >
+                        Year: 2018
+                        </p>
+                      </div>
+                      {work.frontmatter.url && (
+                        <div className="w-30 tr work-info" style={{ opacity: 0 }}>
+                          <a className="white fw7" href={work.frontmatter.url}>
+                            View project
+                          </a>
+                        </div>
+                      )}
                     </div>
                   </article>
                 )
@@ -314,9 +319,9 @@ class IndexPage extends React.Component {
           </div>
           <Slideshow
             works={works}
-            getRef={el => this.detailNode = el}
-            getElementRef={(index, el) => this.detailNodes[index] = el}
-            getScrollerRef={el => this.scrollerNode = el}
+            getRef={el => (this.detailNode = el)}
+            getElementRef={(index, el) => (this.detailNodes[index] = el)}
+            getScrollerRef={el => (this.scrollerNode = el)}
             isActive={this.state.currentIndex !== undefined}
           />
         </div>
@@ -331,10 +336,13 @@ class IndexPage extends React.Component {
             height: CURSOR_SIZE,
             borderRadius: '50%',
             pointerEvents: 'none',
-            mixBlendMode: 'difference',
+            // mixBlendMode: 'difference',
             zIndex: 9999,
           }}
         />
+        <div className="absolute bottom-0 left-0 z-9999">
+          simonecarella@gmail.com
+        </div>
       </>
     )
   }
@@ -344,9 +352,7 @@ export default ({ children, ...rest }) => (
   <StaticQuery
     query={graphql`
       query works {
-        allMarkdownRemark(
-          filter: { fileAbsolutePath: { regex: "/works/" } }
-        ) {
+        allMarkdownRemark(filter: { fileAbsolutePath: { regex: "/works/" } }) {
           edges {
             node {
               excerpt(pruneLength: 5000)
@@ -354,7 +360,7 @@ export default ({ children, ...rest }) => (
                 url
                 title
                 images {
-                 publicURL 
+                  publicURL
                 }
                 images {
                   publicURL
