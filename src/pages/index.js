@@ -2,13 +2,43 @@ import React from 'react'
 import { StaticQuery, graphql } from 'gatsby'
 import Img from 'gatsby-image'
 import { TimelineLite, TweenLite, TweenMax, Elastic, Back, Power2 } from 'gsap'
-import Slideshow from '../components/carousel'
+import Slideshow, { pan } from '../components/carousel'
 
 const CURSOR_SIZE = 32
 
 class IndexPage extends React.Component {
   state = {
     index: 0,
+  }
+  slideshow = null
+  scroll = new TimelineLite({ paused: true })
+
+  componentDidMount = () => {
+    window.addEventListener('mousedown', this.mouseDown, { passive: true })
+    window.addEventListener('mouseup', this.mouseUp, { passive: true })
+    window.addEventListener('mousemove', this.mousemove, { passive: true })
+  }
+
+  mouseDown = () => {
+    this.mousedown = true
+  }
+
+  mouseUp = () => {
+    this.mousedown = false
+  }
+
+  mousemove = (evt) => {
+    if (!this.mousedown) {
+      return
+    }
+
+    const x = evt.clientX / window.innerWidth
+    requestAnimationFrame(() => {
+      // TweenLite.to(pan, 1.0, {
+      //   x: x * 3,
+      // }).play()
+      pan.x = x * 3
+    })
   }
 
   next = () => {
@@ -36,7 +66,11 @@ class IndexPage extends React.Component {
               simone carella
               <span className="db fw1">digital designer/coder</span>
             </h1>
-            <Slideshow index={this.state.index} images={images} />
+            <Slideshow
+              ref={comp => this.slideshow = comp}
+              index={this.state.index}
+              images={images}
+            />
             <div className="absolute z-9999">
               <div onClick={this.next}>next</div>
               <div onClick={this.prev}>prev</div>

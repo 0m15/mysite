@@ -2,17 +2,12 @@ import React from 'react'
 import _regl from 'regl/dist/regl.min'
 import { mouseChange, mouseWheelChange } from '../utils/mouse'
 import { getMatrix } from '../utils/texture-matrix'
-import springController from '../utils/spring'
 import { TweenLite, TimelineLite, Power2, Back } from 'gsap'
 
 const mouse = mouseChange()
 const mousewheel = mouseWheelChange()
-const mousewheelSpring = springController()
-const mouseSpringX = springController()
-const mouseSpringY = springController()
-const fadeSpring = springController()
-const windSpring = springController(0)
-const pan = { x: 0, displace: 0, offsetX: 0 }
+export const pan = { x: 0, displace: 0, offsetX: 0 }
+
 const timeline  = new TimelineLite({ paused: true })
 TweenLite.defaultEase = Power2.easeInOut
 
@@ -35,13 +30,11 @@ class ImageFilter extends React.Component {
   componentDidMount() {
     const images = this.props.images.map(img => imagePromise(img))
     Promise.all(images).then(images => {
-      console.log('images', images)
       this.renderGl(images)
     })
   }
 
   componentWillUnmount() {
-    fadeSpring.to = 0
     this.textures.forEach(t => {
       t.destroy()
     })
@@ -50,13 +43,12 @@ class ImageFilter extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.index !== this.props.index) {
-      console.log('index', nextProps.index)
       TweenLite.to(pan, 2.5, {
         x: nextProps.index,
         ease: Back.easeInOut,
       }).play()
       timeline.to(pan, 0.75, {
-        displace: 16.0,
+        displace: nextProps.index > this.props.index ? 10 : -10,
         ease: Back.easeIn,
       })
       .to(pan, 0.75, {
@@ -310,11 +302,11 @@ class ImageFilter extends React.Component {
         u_color: regl.prop('u_color'),
         u_wind: () => {
           // ((Input - InputLow) / (InputHigh - InputLow)) * (OutputHigh - OutputLow) + OutputLow;
-          return this.panSpring.speed
+          return 1.0
         },
         t: ({ tick }) => tick,
         u_fade: () => {
-          return fadeSpring.current
+          return 1.0
         },
         resolution: ({ drawingBufferHeight, drawingBufferWidth }) => {
           return [drawingBufferWidth, drawingBufferHeight]
@@ -329,11 +321,7 @@ class ImageFilter extends React.Component {
           return [pan.offsetX, 0]
         },
         mousewheel: () => {
-          requestAnimationFrame(() => {
-            mousewheelSpring.to = mousewheel.dy * 0.01 + 0.5
-            console.log(mousewheelSpring.current)
-          })
-          return mousewheelSpring.current
+          return mousewheel.dy
         },
       },
       depth: {
@@ -355,12 +343,7 @@ class ImageFilter extends React.Component {
       count: 6,
     })
 
-
-    //fadeSpring.to = { to: 1, friction: 50, tension: 10, delay: 1000 }
-    fadeSpring.to = { to: 1, tension: 20, friction: 6 }
-
     regl.frame(({ time, ...props }) => {
-      console.log('pan', pan)
       regl.clear({
         color: [1, 1, 1, 1],
         depth: 1,
@@ -455,10 +438,11 @@ class ImageFilter extends React.Component {
     return (
       <canvas
         className="fixed bottom-0 left-0"
-        width={2000}
-        height={900}
+        width={1200}
+        height={1000}
         style={{
           width: '100%',
+          height: '100%',
           zIndex: 9999,
         }}
         ref={el => (this.canvas = el)}
