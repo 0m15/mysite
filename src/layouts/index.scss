@@ -5,8 +5,18 @@ html,
 body {
   font-family: $sans-serif;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 .no-cursor {
   cursor: none;
+}
+
+::selection {
+  color: #444;
+  background: transparent;
+}
+
+::-moz-selection {
+  background: transparent;
 }

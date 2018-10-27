@@ -1,11 +1,12 @@
 ---
 title: Dataviz
 order: 2
-cover: './images/ht.gif'
-url: ''
+cover: './images/sanofi.gif'
+type: Front-end engineering
+url: http://hiddentribes.us
 images: 
  - './images/ht.gif'
  - './images/ht.gif'
 ---
 
-Lorem ipsum dolor sit amet consectetur
+Tools developed for data visualization, geospatial visualization, charts, dashboards.
