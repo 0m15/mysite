@@ -1,7 +1,7 @@
 ---
 title: The Hidden Tribes
 order: 0
-cover: './images/ht.gif'
+cover: './images/t.jpg'
 type: Front-end engineering, UI Design
 url: http://hiddentribes.us
 images: 

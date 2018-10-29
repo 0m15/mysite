@@ -1,9 +1,10 @@
 import React from 'react'
-// import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
+import Header from '../components/header'
+import WorksLayout from './works'
 import './index.scss'
 
-const Layout = ({ children, data }) => {
+const Layout = ({ children, data, ...rest }) => {
   return (
     <div style={{
       minHeight: '100vh',
@@ -15,13 +16,10 @@ const Layout = ({ children, data }) => {
           { name: 'keywords', content: 'sample, something' },
         ]}
       />
-      {/* <Cursor /> */}
-      {/* <Header
-          siteTitle={'simc'}
-        /> */}
-      <main style={{ height: '100vh' }}>
+      <Header siteTitle={'simc'} />
+      <WorksLayout {...rest}>
         {children}
-      </main>
+      </WorksLayout>
       {/* <Footer
           siteTitle={'simc'}
         /> */}

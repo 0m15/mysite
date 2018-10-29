@@ -1,7 +1,7 @@
 ---
 title: Dataviz
 order: 2
-cover: './images/sanofi.gif'
+cover: './images/dt.jpg'
 type: Front-end engineering
 url: http://hiddentribes.us
 images: 
