@@ -9,11 +9,7 @@ const CURSOR_SIZE = 32
 class IndexPage extends React.Component {
   render() {
     return (
-      <div style={{
-        background: 'yellow',
-        height: 50,
-      }}>
-      </div>
+      <div/>
     )
   }
 }
