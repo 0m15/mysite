@@ -34,7 +34,6 @@ class WorksLayout extends React.Component {
       : undefined
     const showControls = selectedIndex === undefined
     const showDetail = !showControls
-    console.log(window.location.pathname, showDetail)
     return (
       <>
         <div className="mw8 center">
@@ -103,7 +102,7 @@ class WorksLayout extends React.Component {
         <div className="bg-white">
           <TransitionGroup>
             <Transition
-              key={window.location.pathname}
+              key={typeof window !== 'undefined' ? window.location.pathname : ''}
               timeout={1000}
               mountOnEnter
               unmountOnExit

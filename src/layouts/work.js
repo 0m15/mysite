@@ -17,10 +17,10 @@ const WorkLayout = ({ children, data, pageContext, ...rest }) => {
             <h2 className="f4 fade">{node.frontmatter.title}</h2>
             <div className="flex f7 fade">
               <div className="w-third fade">{node.frontmatter.type}</div>
-              <div className="w-third fade">
+              <div className="w-third fade tc">
                 {node.frontmatter.url ? 'View Project' : ''}
               </div>
-              <div className="w-third fade">Next Project</div>
+              <div className="w-third fade tr">Next Project</div>
             </div>
           </div>
         </div>
