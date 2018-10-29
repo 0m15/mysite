@@ -12,13 +12,13 @@ class WorksLayout extends React.Component {
 
   next = () => {
     this.setState({
-      index: this.state.index + 1,
+      index: Math.min(this.state.index + 1, this.props.data.allMarkdownRemark.edges.length - 1),
     })
   }
 
   prev = () => {
     this.setState({
-      index: this.state.index - 1,
+      index: Math.max(this.state.index - 1, 0),
     })
   }
 
