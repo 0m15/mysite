@@ -50,16 +50,16 @@ class Carousel extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.index !== this.props.index) {
-      TweenLite.to(scene, 1.5, {
+      TweenLite.to(scene, 1.0, {
         x: nextProps.index,
         ease: Power3.easeInOut,
       }).play()
       timeline
-        .to(scene, 0.75, {
+        .to(scene, 0.5, {
           displace: nextProps.index > this.props.index ? 6 : -6,
           ease: Power3.easeIn,
         })
-        .to(scene, 0.75, {
+        .to(scene, 0.5, {
           displace: 0,
           ease: Power3.easeOut,
         })
@@ -79,11 +79,21 @@ class Carousel extends React.Component {
           alpha: 0,
         }
       ).play()
-      TweenLite.to(scene.props[nextProps.selectedIndex], 1.0, {
+      TweenLite.to(scene.props[nextProps.selectedIndex], 0.5, {
         scale: 0.75,
         offsetY: 0.25,
         alpha: 1,
       }).play()
+      timeline
+        .to(scene, 0.25, {
+          displace: 12,
+          ease: Power3.easeIn,
+        })
+        .to(scene, 0.75, {
+          displace: 0,
+          ease: Power3.easeOut,
+        })
+        .play()
       scene.x = nextProps.selectedIndex
       // TweenLite.to(scene, 1.5, {
       //   x: nextProps.selectedIndex,
@@ -100,6 +110,16 @@ class Carousel extends React.Component {
         alpha: 1,
         offsetY: 0,
       }).play()
+      timeline
+        .to(scene, 0.5, {
+          displace: 12,
+          ease: Power3.easeIn,
+        })
+        .to(scene, 0.25, {
+          displace: 0,
+          ease: Power3.easeOut,
+        })
+        .play()
       scene.x = this.props.index
     }
   }
@@ -209,8 +229,8 @@ class Carousel extends React.Component {
       },
 
       depth: {
-        enable: true,
-        mask: false, // DONT write to depth buffer!
+        enable: false,
+        // mask: false, // DONT write to depth buffer!
       },
     })
     const drawImg = regl({
@@ -219,13 +239,11 @@ class Carousel extends React.Component {
       attribute vec2 position;
       uniform mat4 matrix;
       varying vec2 uv;
-      uniform float u_displacement;
-      uniform float t;
       void main () {
         uv = position.xy * .5 + .5;
-        float dist = sin(uv.y * 3.14 + t * 0.1) * 0.02;
+        // float dist = sin(uv.y * 3.14 + t * 0.1) * 0.02;
         vec2 pos = vec2(position.x, position.y);
-        gl_Position = matrix * vec4(vec2(pos.x + dist * u_displacement, pos.y), 0, 1);
+        gl_Position = matrix * vec4(vec2(pos.x, pos.y), 0, 1);
         // gl_Position = matrix * vec4(position, 0, 1);
       }`,
       frag: `
@@ -239,6 +257,7 @@ class Carousel extends React.Component {
         uniform float mousewheel;
         uniform float u_noise;
         uniform float u_alpha;
+        uniform float u_displacement;
         varying vec2 uv;
         varying float v_rand;
 
@@ -310,13 +329,15 @@ class Carousel extends React.Component {
           vec2 st = gl_FragCoord.xy / resolution.xy;
           float y = uv.y;
           // float dist = perlin(st, 4.0) * 0.125;
-          // float dist = sin(y * 3.14 + t * 0.1) * 0.02;
+          float dist = sin(y * 3.14 + t * 0.1) * 0.02;
           float fade = 1.0;
+          float map = distance(st, vec2(0.7));
           vec2 mouseOffset = vec2(mouse.x * u_speed, 0);
-          // vec2 displaced = vec2(uv.x + mouseOffset.x + dist, uv.y + mouseOffset.y);
-          vec4 color = texture2D(texture, uv);
+          vec2 displaced = vec2(uv.x + mouseOffset.x + dist * u_displacement * uv.x, uv.y + mouseOffset.y);
+          vec4 color = texture2D(texture, displaced);
           // float rectangle = step(uv.x, 0.9);
           gl_FragColor = vec4(color.rgb, u_alpha);
+          // gl_FragColor = vec4(color.rgb, map);
         }`,
       attributes: {
         position: [-1, 1, 1, 1, -1, -1, 1, 1, 1, -1, -1, -1],
@@ -353,19 +374,19 @@ class Carousel extends React.Component {
         enable: false,
         mask: false, // DONT write to depth buffer!
       },
-      // blend: {
-      //   enable: true,
-      //   func: {
-      //     srcRGB: 'src alpha',
-      //     srcAlpha: 1,
-      //     dstRGB: 'src color',
-      //     dstAlpha: 1,
-      //   },
-      //   equation: {
-      //     rgb: 'add',
-      //     alpha: 'add',
-      //   },
-      // },
+      blend: {
+        enable: true,
+        func: {
+          srcRGB: 'src alpha',
+          srcAlpha: 1,
+          dstRGB: 'src color',
+          dstAlpha: 1,
+        },
+        equation: {
+          rgb: 'add',
+          alpha: 'add',
+        },
+      },
       count: 6,
     })
 
