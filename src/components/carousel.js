@@ -4,10 +4,11 @@ import { mouseChange, mouseWheelChange } from '../utils/mouse'
 import { getMatrix } from '../utils/texture-matrix'
 import { TweenLite, TimelineLite, Power3, Back } from 'gsap'
 import vectorizeText from 'vectorize-text'
+import state from '../utils/choreography'
 
 const mouse = mouseChange()
 const mousewheel = mouseWheelChange()
-export const scene = { x: 0, displace: 0, offsetX: 0, props: [] }
+export const scene = state.state.slider//{ x: 0, displace: 0, offsetX: 0, props: [] }
 
 const timeline = new TimelineLite({ paused: true })
 TweenLite.defaultEase = Power3.easeInOut
@@ -50,20 +51,24 @@ class Carousel extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.index !== this.props.index) {
-      TweenLite.to(scene, 1.0, {
-        x: nextProps.index,
-        ease: Power3.easeInOut,
-      }).play()
-      timeline
-        .to(scene, 0.5, {
-          displace: nextProps.index > this.props.index ? 6 : -6,
-          ease: Power3.easeIn,
-        })
-        .to(scene, 0.5, {
-          displace: 0,
-          ease: Power3.easeOut,
-        })
-        .play()
+      state.slideTo({
+        fromIndex: this.props.index,
+        toIndex: nextProps.index,
+      })
+      // TweenLite.to(scene, 1.0, {
+      //   x: nextProps.index,
+      //   ease: Power3.easeInOut,
+      // }).play()
+      // timeline
+      //   .to(scene, 0.5, {
+      //     displace: nextProps.index > this.props.index ? 6 : -6,
+      //     ease: Power3.easeIn,
+      //   })
+      //   .to(scene, 0.5, {
+      //     displace: 0,
+      //     ease: Power3.easeOut,
+      //   })
+      //   .play()
     }
 
     if (

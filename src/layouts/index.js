@@ -5,6 +5,7 @@ import WorksLayout from './works'
 import './index.scss'
 
 const Layout = ({ children, data, ...rest }) => {
+  console.log('layout props', rest)
   return (
     <div style={{
       minHeight: '100vh',

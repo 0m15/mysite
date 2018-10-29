@@ -1,10 +1,11 @@
 import React from 'react'
 import { StaticQuery, graphql, Link } from 'gatsby'
 import { Transition, TransitionGroup } from 'react-transition-group'
-import { TimelineLite, TweenLite } from 'gsap/all'
+import { TimelineLite, TweenLite, TweenMax } from 'gsap/all'
 import Slideshow from '../components/carousel'
 
 const tl = new TimelineLite({ paused: true })
+
 class WorksLayout extends React.Component {
   state = { index: 0 }
   scroll = new TimelineLite({ paused: true })
@@ -21,6 +22,10 @@ class WorksLayout extends React.Component {
     })
   }
 
+  componentWillReceiveProps = (nextProps) => {
+    
+  }
+  
   render() {
     const { edges: works } = this.props.data.allMarkdownRemark
     const images = works.map(({ node }) => {
@@ -34,6 +39,7 @@ class WorksLayout extends React.Component {
       : undefined
     const showControls = selectedIndex === undefined
     const showDetail = !showControls
+
     return (
       <>
         <div className="mw8 center">
@@ -73,7 +79,6 @@ class WorksLayout extends React.Component {
             >
               <Transition
                 timeout={1000}
-                mountOnEnter
                 appear
                 in={showControls}
                 addEndListener={(node, done) => {
@@ -100,32 +105,34 @@ class WorksLayout extends React.Component {
           </div>
         </div>
         <div className="bg-white">
-          <TransitionGroup>
+          <TransitionGroup appear>
             <Transition
-              key={typeof window !== 'undefined' ? window.location.pathname : ''}
-              timeout={1000}
+              key={selectedIndex}
               mountOnEnter
               unmountOnExit
-              appear
+              timeout={1000}
               onEnter={node => {
-                TweenLite.set(node.querySelectorAll('.fade'), {
-                  y: 30,
-                  opacity: 0,
-                })
-                tl.staggerTo(node.querySelectorAll('.fade'), 1, {
-                  y: 0,
-                  opacity: 1,
-                }, 0.1).play()
-              }}
-              onExit={node => {
-                // TweenLite.set(node, {
-                //   y: 0,
-                //   opacity: 1,
-                // })
-                tl.staggerTo(node.querySelectorAll('.fade'), 1, {
+                TweenMax.killTweensOf(node)
+                TweenMax.set(node.querySelectorAll('.fade'), {
                   y: -30,
                   opacity: 0,
-                }, 0.1).play()
+                })
+                TweenMax.staggerTo(node.querySelectorAll('.fade'), 0.75, {
+                  y: 0,
+                  opacity: 1,
+                }, 0.1)
+              }}
+              onExit={node => {
+                TweenMax.killTweensOf(node)
+                TweenMax.staggerTo(node.querySelectorAll('.fade'), 0.75, {
+                  y: -30,
+                  opacity: 0,
+                }, 0.1)
+              }}
+              addEndListener={(node, done) => {
+                // TweenMax.eventCallback("onComplete", () => {
+                //   done()
+                // })
               }}
             >
               {this.props.children}
