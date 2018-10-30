@@ -20,3 +20,7 @@ body {
 ::-moz-selection {
   background: transparent;
 }
+
+canvas {
+  z-index: 1 !important;
+}

@@ -46,7 +46,7 @@ class WorksLayout extends React.Component {
               selectedIndex={selectedIndex}
               images={images}
             />
-            <div
+            {!showDetail && <div
               className="absolute w-100 top-0 left-0 z-9999"
               style={{
                 transform: 'translateY(-50%)',
@@ -67,7 +67,7 @@ class WorksLayout extends React.Component {
                   {works[this.state.index].node.frontmatter.title}
                 </h2>
               </Link>
-            </div>
+            </div>}
             <div
               className="absolute w-100 z-9999"
               style={{

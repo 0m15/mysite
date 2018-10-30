@@ -16,12 +16,12 @@ class WorkLayout extends React.Component {
           }}
         >
           <div
-            className="bg-near-black white fade relative z-9999"
+            className="bg-near-black white fade"
             style={{
               height: '20vh',
             }}
           >
-            <div className="mw7 center ph4">
+            <div className="mw7 center ph4 relative z-9999">
               <h2 className="f4 ma0 pb3">
                 <span className="dib relative overflow-hidden">
                   <span className="fade">{node.frontmatter.title}</span>
