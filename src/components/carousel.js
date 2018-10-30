@@ -4,7 +4,12 @@ import { mouseChange, mouseWheelChange } from '../utils/mouse'
 import { getMatrix } from '../utils/texture-matrix'
 import { TweenLite, TimelineLite, Power3, Back } from 'gsap'
 import vectorizeText from 'vectorize-text'
-import { state, slideTo, openProject, closeProject } from '../utils/choreography'
+import {
+  state,
+  slideTo,
+  openProject,
+  closeProject,
+} from '../utils/choreography'
 
 const mouse = mouseChange()
 const mousewheel = mouseWheelChange()
@@ -84,8 +89,15 @@ class Carousel extends React.Component {
 
   componentDidMount() {
     const images = this.props.images.map(img => imgLoad(img.url))
+    
     Promise.all(images).then(images => {
       this.renderGl(images)
+
+      if (this.props.selectedIndex !== undefined) {
+        openProject({
+          index: this.props.selectedIndex,
+        })
+      }
     })
   }
 
@@ -129,7 +141,7 @@ class Carousel extends React.Component {
     }))
     const meshes = images.map(img => ({
       texture: regl.texture({
-        data: img, 
+        data: img,
         // flipY: true ,
       }),
       textMesh: vectorizeText('Intellitower', {

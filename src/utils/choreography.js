@@ -37,6 +37,7 @@ export function slideTo({ fromIndex, toIndex }) {
 }
 
 export function openProject({ index }) {
+  console.log('state', state.slider.props)
   TweenMax.to(state.slider.props.filter((p, i) => i !== index), 1.0, {
     scale: 0,
     alpha: 0,
