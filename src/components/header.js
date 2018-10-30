@@ -8,7 +8,7 @@ class Header extends React.Component {
 
   render() {
     return (
-      <div className="fixed w-100 pt4 pb4 center pl3 pl4 z-999 top-0">
+      <div className="fixed w-100 pt4 pb4 center ph4 z-999 top-0">
         <div className="mw7 center">
         <h1 className="f6 w5 ma0">
           <Link to={`/`} className="near-white no-underline">

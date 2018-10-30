@@ -1,7 +1,7 @@
 ---
-title: The Hidden Tribes
+title: Porta di Basso
 order: 0
-cover: './images/t.jpg'
+cover: './images/pdb.jpg'
 type: Front-end engineering, UI Design
 url: http://hiddentribes.us
 images: 

@@ -1,7 +1,7 @@
 ---
 title: Intellitower
 order: 1
-cover: './images/in.jpg'
+cover: './images/it-1.jpg'
 url: http://www.hiddentribes.us
 type: Front-end engineering, UI/IDx
 images: 

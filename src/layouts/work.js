@@ -3,10 +3,6 @@ import { Link } from 'gatsby'
 import Helmet from 'react-helmet'
 
 class WorkLayout extends React.Component {
-  componentWillEnter(cb) {
-    console.log('willEnter')
-    cb()
-  }
   render() {
     const { children, data, pageContext, ...rest } = this.props
     const { node } = pageContext
@@ -19,27 +15,62 @@ class WorkLayout extends React.Component {
             top: '80%',
           }}
         >
-          <div className="bg-black white fade pb6 relative z-9999">
-            <div className="mw7 center ph3">
-              <h2 className="f4 fade">{node.frontmatter.title}</h2>
-              <div className="flex f7 fade">
-                <div className="w-third fade">{node.frontmatter.type}</div>
+          <div
+            className="bg-near-black white fade relative z-9999"
+            style={{
+              height: '20vh',
+            }}
+          >
+            <div className="mw7 center ph4">
+              <h2 className="f4 ma0 pb3">
+                <span className="dib relative overflow-hidden">
+                  <span className="fade">{node.frontmatter.title}</span>
+                  <div
+                    className="absolute left-0 w-100 h-100 top-0 bg-white text-cover"
+                    style={{
+                      mixBlendMode: 'difference',
+                    }}
+                  />
+                </span>
+              </h2>
+              <div className="flex f6">
+                <div className="w-third">
+                  <span className="dib relative overflow-hidden">
+                    <span className="fade">{node.frontmatter.type}</span>
+                    <div className="absolute left-0 w-100 h-100 top-0 bg-white text-cover" />
+                  </span>
+                </div>
                 <div className="w-third fade tc">
-                  {node.frontmatter.url ? 'View Project' : ''}
+                  <span className="dib relative overflow-hidden">
+                    <span className="fade">
+                      {node.frontmatter.url ? 'View Project' : ''}
+                    </span>
+                    <div className="absolute left-0 w-100 h-100 top-0 bg-white text-cover" />
+                  </span>
                 </div>
                 <div className="w-third fade tr">
-                  <Link to="/works/intellitower">Next Project</Link>
+                  <span className="dib relative overflow-hidden">
+                    <span className="fade">
+                      <Link to="/works/intellitower" className="white fw8">
+                        Next Project
+                      </Link>
+                    </span>
+                    <div className="absolute left-0 w-100 h-100 top-0 bg-white text-cover" />
+                  </span>
                 </div>
               </div>
             </div>
+            <div className="tc f7 o-10 absolute bottom-0 white w-100 pb4 fw8">
+              Scroll
+            </div>
           </div>
           <div
-            className="bg-white fade"
+            className="bg-white"
             style={{
               minHeight: '100vh',
             }}
           >
-            <div className="mw7 center ph3 pt4 fade">
+            <div className="mw7 center ph4 pt4 fade">
               <p className="f6 lh-copy ma0 pa0">{node.excerpt}</p>
             </div>
           </div>

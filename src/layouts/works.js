@@ -21,10 +21,6 @@ class WorksLayout extends React.Component {
       index: Math.max(this.state.index - 1, 0),
     })
   }
-
-  componentWillReceiveProps = (nextProps) => {
-    
-  }
   
   render() {
     const { edges: works } = this.props.data.allMarkdownRemark
@@ -59,7 +55,7 @@ class WorksLayout extends React.Component {
               }}
             >
               <Link
-                className="db w-50 center h-100"
+                className="db w-100 flex items-center justify-center h-100 white"
                 to={
                   '/works/' +
                   works[this.state.index].node.frontmatter.title
@@ -67,7 +63,9 @@ class WorksLayout extends React.Component {
                     .toLowerCase()
                 }
               >
-                <div className="w-50 center h-100" />
+                <h2 className="">
+                  {works[this.state.index].node.frontmatter.title}
+                </h2>
               </Link>
             </div>
             <div
@@ -112,28 +110,42 @@ class WorksLayout extends React.Component {
               unmountOnExit
               timeout={1000}
               onEnter={node => {
+                const fadeElements = node.querySelectorAll('.fade')
+                const textCover = node.querySelectorAll('.text-cover')
                 TweenMax.killTweensOf(node)
-                TweenMax.set(node.querySelectorAll('.fade'), {
-                  y: -30,
+                TweenMax.set(fadeElements, {
+                  // y: -30,
                   opacity: 0,
                 })
-                TweenMax.staggerTo(node.querySelectorAll('.fade'), 0.75, {
-                  y: 0,
+                TweenMax.set(textCover, {
+                  x: '-101%',
+                })
+                TweenMax.staggerTo(fadeElements, 0.75, {
+                  // y: 0,
                   opacity: 1,
+                }, 0.1)
+                TweenMax.staggerTo(textCover, 0.75, {
+                  x: '101%',
+                  delay: 0.1,
                 }, 0.1)
               }}
               onExit={node => {
                 TweenMax.killTweensOf(node)
                 TweenMax.staggerTo(node.querySelectorAll('.fade'), 0.75, {
-                  y: -30,
+                  // y: -30,
                   opacity: 0,
+                  delay: 0.1,
+                }, 0.1)
+                TweenMax.staggerTo(node.querySelectorAll('.text-cover'), 0.75, {
+                  x: '-101%',
                 }, 0.1)
               }}
-              addEndListener={(node, done) => {
-                // TweenMax.eventCallback("onComplete", () => {
-                //   done()
-                // })
-              }}
+              // addEndListener={(node, done) => {
+              //   TweenMax.eventCallback("onComplete", () => {
+              //     console.log('completed')
+              //     // done()
+              //   })
+              // }}
             >
               {this.props.children}
             </Transition>

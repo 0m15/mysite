@@ -7,7 +7,7 @@ import './index.scss'
 const Layout = ({ children, data, ...rest }) => {
   console.log('layout props', rest)
   return (
-    <div style={{
+    <div className="bg-near-black" style={{
       minHeight: '100vh',
     }}>
       <Helmet
