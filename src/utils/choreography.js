@@ -38,12 +38,15 @@ export function slideTo({ fromIndex, toIndex }) {
 
 export function openProject({ index }) {
   TweenMax.to(state.slider.props.filter((p, i) => i !== index), 1.0, {
-    scale: 0.3,
+    scale: 0,
     alpha: 0,
   })
   TweenMax.to(state.slider.props[index], 0.5, {
     scale: 1.1,
     alpha: .5,
+  })
+  TweenMax.to(state.slider, 0.5, {
+    x: index,
   })
   tweenDisplace(0, 1)
 }

@@ -40,8 +40,16 @@ exports.createPages = ({ actions, graphql }) => {
       return Promise.reject(result.errors)
     }
 
-    result.data.allMarkdownRemark.edges.forEach(({ node }) => {
+    const edges = result.data.allMarkdownRemark.edges
+    edges.forEach(({ node }, index) => {
+      
+      let nextNode = (index === edges.length - 1)
+        ? edges[0].node
+        : edges[index + 1].node
+      
       const path = node.frontmatter.title.replace(/\s/g, '-').toLowerCase()
+      const nextPath = nextNode.frontmatter.title.replace(/\s/g, '-').toLowerCase()
+      
       console.log('[i] Creating page /works/' + path)
       createPage({
         path: '/works/' + path,
@@ -50,6 +58,7 @@ exports.createPages = ({ actions, graphql }) => {
           id: node.id,
           node,
           pathname: path,
+          nextUrl: '/works/' + nextPath,
         }, // additional data can be passed via context
       })
     })

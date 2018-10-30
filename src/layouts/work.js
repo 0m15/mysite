@@ -6,6 +6,7 @@ class WorkLayout extends React.Component {
   render() {
     const { children, data, pageContext, ...rest } = this.props
     const { node } = pageContext
+    console.log('data', data, this.props)
     return (
       <>
         <Helmet title={node.frontmatter.title} />
@@ -51,7 +52,7 @@ class WorkLayout extends React.Component {
                 <div className="w-third fade tr">
                   <span className="dib relative overflow-hidden">
                     <span className="fade">
-                      <Link to="/works/intellitower" className="white fw8">
+                      <Link to={pageContext.nextUrl} className="white fw8">
                         Next Project
                       </Link>
                     </span>
