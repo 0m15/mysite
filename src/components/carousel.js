@@ -96,6 +96,7 @@ class Carousel extends React.Component {
         data: img,
         premultiplyAlpha: true,
         mag: 'linear',
+        min: 'linear',
       }),
     }))
 
@@ -110,11 +111,61 @@ class Carousel extends React.Component {
       precision lowp float;
       uniform sampler2D tInput;
       varying vec2 uv;
+
+      vec2 barrelDistortion(vec2 coord, float amt) {
+        vec2 cc = coord - 0.5;
+        float dist = dot(cc, cc);
+        return coord + cc * dist * amt;
+      }
+      
+      float sat( float t ) {
+        return clamp( t, 0.0, 1.0 );
+      }
+      
+      float linterp( float t ) {
+        return sat( 1.0 - abs( 2.0 * t - 1.0 ) );
+      }
+      
+      float remap( float t, float a, float b ) {
+        return sat( (t - a) / (b - a) );
+      }
+      
+      vec4 spectrum_offset( float t ) {
+        vec4 ret;
+        float lo = step(t, 0.5);
+        float hi = 1.0 - lo;
+        float w = linterp( remap( t, 1.0/6.0, 5.0/6.0 ) );
+        ret = vec4(lo,1.0,hi, 1.) * vec4(1.0-w, w, 1.0-w, 1.);
+      
+        return pow( ret, vec4(1.0/2.2) );
+      }
+
+      vec4 barrel_blur() {
+        // vec2 uv=(gl_FragCoord.xy/resolution.xy*.5)+.25;
+        vec4 a1=texture2D(tInput, barrelDistortion(uv,0.0));
+        vec4 a2=texture2D(tInput, barrelDistortion(uv,0.2));
+        vec4 a3=texture2D(tInput, barrelDistortion(uv,0.4));
+        vec4 a4=texture2D(tInput, barrelDistortion(uv,0.6));
+        
+        vec4 a5=texture2D(tInput, barrelDistortion(uv,0.8));
+        vec4 a6=texture2D(tInput, barrelDistortion(uv,1.0));
+        vec4 a7=texture2D(tInput, barrelDistortion(uv,1.2));
+        vec4 a8=texture2D(tInput, barrelDistortion(uv,1.4));
+        
+        vec4 a9=texture2D(tInput, barrelDistortion(uv,1.6));
+        vec4 a10=texture2D(tInput, barrelDistortion(uv,1.8));
+        vec4 a11=texture2D(tInput, barrelDistortion(uv,2.0));
+        vec4 a12=texture2D(tInput, barrelDistortion(uv,2.2));
+
+        vec4 tx=(a1+a2+a3+a4+a5+a6+a7+a8+a9+a10+a11+a12)/12.;
+        return tx;
+      }
+
       void main () {
-        vec2 warp = uv + sin(t) * vec2(0.5 - uv.y, uv.x - 0.5)
-        - 0.01 * (uv - 0.5);
+        vec2 warp = uv;
         vec3 color = texture2D(tInput, warp).rgb;
-        gl_FragColor = vec4(color.r, 1.0, color.b, 0.5);
+        vec4 blurred = barrel_blur();
+        gl_FragColor = vec4(blurred.rgb, blurred.a - 0.4); //vec4(color.r, color.g, color.b, 0.5);
         // gl_FragColor = vec4(texture2D(tInput, warp).rgb, 0.2);
       }
       `,
@@ -148,7 +199,7 @@ class Carousel extends React.Component {
           dstAlpha: 1,
         },
         equation: {
-          rgb: 'add',
+          rgb: 'subtract',
           alpha: 'add',
         },
       },
@@ -156,44 +207,6 @@ class Carousel extends React.Component {
       count: 3,
     })
 
-    const drawText = regl({
-      vert: `
-        precision lowp float;
-        attribute vec2 position;
-        uniform vec2 u_offset;
-        uniform float u_pan;
-        varying vec2 vUv;
-
-        void main() {
-          vec2 pos = vec2((position.x * 0.1) + (u_offset.x * 0.9) - u_pan * 0.9, -position.y * 0.15);
-          gl_Position = vec4(pos, 0, 1);
-          vUv = pos;
-        }
-      `,
-      frag: `
-      precision lowp float;
-      varying vec2 vUv;
-
-      void main() {
-        gl_FragColor = vec4(vec3(1.0, 0.5, 0.1), 1.0);
-      }  
-      `,
-      attributes: {
-        position: regl.prop('position'),
-      },
-
-      elements: regl.prop('elements'),
-
-      uniforms: {
-        u_offset: regl.prop('u_offset'),
-        u_pan: regl.prop('u_pan'),
-      },
-
-      depth: {
-        enable: false,
-        // mask: false, // DONT write to depth buffer!
-      },
-    })
     const drawImg = regl({
       vert: `
       precision lowp float;
