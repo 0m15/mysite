@@ -14,7 +14,7 @@ body {
 
 ::selection {
   color: #444;
-  background: transparent;
+  background: rgba(0, 0, 0, .1);
 }
 
 ::-moz-selection {

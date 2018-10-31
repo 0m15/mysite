@@ -6,10 +6,21 @@ class WorkLayout extends React.Component {
   render() {
     const { children, data, pageContext, ...rest } = this.props
     const { node } = pageContext
-    console.log('data', data, this.props)
     return (
       <>
         <Helmet title={node.frontmatter.title} />
+        <div>
+        <div className="absolute right-0 pr4 top-0 z-9999" style={{
+              top: '50%',
+            }}>
+            <span className="dib relative z-9999 overflow-hidden">
+              <span className="fade">
+                <Link to={pageContext.nextUrl} className="white fw8">
+                  Next Project
+                </Link>
+              </span>
+            </span>
+          </div>
         <div
           className="absolute w-100 left-0 pb4 work-detail"
           style={{
@@ -44,7 +55,7 @@ class WorkLayout extends React.Component {
                 <div className="w-third fade tc">
                   <span className="dib relative overflow-hidden">
                     <span className="fade">
-                      {node.frontmatter.url ? 'View Project' : ''}
+                      Year: 2018
                     </span>
                     <div className="absolute left-0 w-100 h-100 top-0 bg-white text-cover" />
                   </span>
@@ -52,29 +63,37 @@ class WorkLayout extends React.Component {
                 <div className="w-third fade tr">
                   <span className="dib relative overflow-hidden">
                     <span className="fade">
-                      <Link to={pageContext.nextUrl} className="white fw8">
-                        Next Project
-                      </Link>
+                      {node.frontmatter.url ? 'View Project' : ''}
                     </span>
                     <div className="absolute left-0 w-100 h-100 top-0 bg-white text-cover" />
                   </span>
                 </div>
               </div>
             </div>
-            <div className="tc f7 o-10 absolute bottom-0 white w-100 pb4 fw8">
+            {/* <div className="tc f7 o-10 absolute bottom-0 white w-100 pb4 fw8">
               Scroll
-            </div>
+            </div> */}
           </div>
           <div
-            className="bg-white"
+            className="bg-white pt5"
             style={{
               minHeight: '100vh',
             }}
           >
             <div className="mw7 center ph4 pt4 fade">
               <p className="f6 lh-copy ma0 pa0">{node.excerpt}</p>
+              <div className="tc">
+                {node.frontmatter.images.map((image, i) => {
+                  return (
+                    <div key={i} className="pv4">
+                      <img src={image.publicURL} />
+                    </div>
+                  )
+                })}
+              </div>
             </div>
           </div>
+        </div>
         </div>
       </>
     )

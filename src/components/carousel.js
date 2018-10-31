@@ -2,21 +2,19 @@ import React from 'react'
 import _regl from 'regl/dist/regl.min'
 import { mouseChange, mouseWheelChange } from '../utils/mouse'
 import { getMatrix } from '../utils/texture-matrix'
-import { TweenLite, TimelineLite, Power3, Back } from 'gsap'
+import { TweenMax, TimelineLite, Power3, Back } from 'gsap'
 import vectorizeText from 'vectorize-text'
 import {
   state,
   slideTo,
   openProject,
   closeProject,
+  setMeshProps,
 } from '../utils/choreography'
 
 const mouse = mouseChange()
-const mousewheel = mouseWheelChange()
-export const sliderState = state.slider //{ x: 0, displace: 0, offsetX: 0, props: [] }
-
-const timeline = new TimelineLite({ paused: true })
-TweenLite.defaultEase = Power3.easeInOut
+const sliderState = state.slider
+TweenMax.defaultEase = Power3.easeInOut
 
 function imgLoad(url, onProgress) {
   // Create new promise with the Promise() constructor;
@@ -80,11 +78,7 @@ class Carousel extends React.Component {
 
   constructor(props) {
     super(props)
-    sliderState.props = props.images.map((d, i) => ({
-      scale: 0.35,
-      alpha: 1,
-      offsetY: 0,
-    }))
+    setMeshProps(props.images)
   }
 
   componentDidMount() {
@@ -123,7 +117,6 @@ class Carousel extends React.Component {
       openProject({
         index: nextProps.selectedIndex,
       })
-      // TODO: set x
     }
 
     if (
@@ -131,7 +124,6 @@ class Carousel extends React.Component {
       this.props.selectedIndex !== undefined
     ) {
       closeProject()
-      // TODO: set x
     }
   }
 
@@ -144,13 +136,13 @@ class Carousel extends React.Component {
         data: img,
         // flipY: true ,
       }),
-      textMesh: vectorizeText('Intellitower', {
-        textAlign: 'center',
-        textBaseline: 'top',
-        triangles: true,
-        font: 'Helvetica',
-        fontWeight: 800,
-      }),
+      // textMesh: vectorizeText('Intellitower', {
+      //   textAlign: 'center',
+      //   textBaseline: 'top',
+      //   triangles: true,
+      //   font: 'Helvetica',
+      //   fontWeight: 800,
+      // }),
     }))
     const feedBackTexture = regl.texture({
       copy: true,
@@ -251,17 +243,20 @@ class Carousel extends React.Component {
       vert: `
       precision lowp float;
       attribute vec2 position;
+      uniform vec2 mouse;
+      uniform float u_speed;
       uniform mat4 matrix;
       varying vec2 uv;
 
-      float barrelPower = 1.2;
+      float barrelPower = 0.25;
       
       vec4 distort(vec4 p) {
-        vec2 v = p.xy / p.w;
+        vec2 v = p.xy * p.w;
         // Convert to polar coords:
         float radius = length(v);
+        
         if (radius > 0.0) {
-          float theta = atan(v.y,v.x);
+          float theta = atan(v.y, v.x);
           
           // Distort:
           radius = pow(radius, barrelPower);
@@ -269,7 +264,7 @@ class Carousel extends React.Component {
           // Convert back to Cartesian:
           v.x = radius * cos(theta);
           v.y = radius * sin(theta);
-          p.xy = v.xy * p.w;
+          p.xy = v.xy * 1.0;
         }
         return p;
       }
@@ -277,8 +272,9 @@ class Carousel extends React.Component {
       void main () {
         uv = position.xy * .5 + .5;
         // float dist = sin(uv.y * 3.14 + t * 0.1) * 0.02;
+        vec2 mouseOffset = vec2(mouse.x * u_speed, mouse.y * u_speed);
         vec2 pos = vec2(position.x, position.y);
-        gl_Position = distort(matrix * vec4(vec2(pos.x, pos.y), 0, 1));
+        gl_Position = distort(matrix * vec4(pos + mouseOffset, 0, 1));
         // gl_Position = matrix * vec4(position, 0, 1);
       }`,
       frag: `
@@ -286,9 +282,6 @@ class Carousel extends React.Component {
         uniform sampler2D texture;
         uniform vec2 resolution;
         uniform float t;
-        uniform vec2 mouse;
-        uniform float u_fade;
-        uniform float u_speed;
         uniform float mousewheel;
         uniform float u_noise;
         uniform float u_alpha;
@@ -344,11 +337,9 @@ class Carousel extends React.Component {
           float distY = sin(uv.x * 32.1897 + t * 0.1) * 0.05;
           float mapX = 1.0 - cubicPulse(0.25, 0.25, uv.x);
           float mapY = 1.0 - cubicPulse(0.25, 0.25, uv.y);
-          vec2 mouseOffset = vec2(mouse.x * u_speed, 0);
           vec2 displaced = vec2(uv.x + dist * u_displacement * mapX, uv.y + (distY * u_displacementY * mapY));
-          // vec4 color = texture2D(texture, displaced);
 
-          // --- APPLY BARREL DISTORTION ---
+          // --- BARREL DISTORTION ---
           vec4 sumcol = vec4(0.0);
           vec4 sumw = vec4(0.0);	
           for ( int i=0; i<num_iter;++i )
@@ -356,7 +347,7 @@ class Carousel extends React.Component {
             float tt = float(i) * reci_num_iter_f;
             vec4 w = spectrum_offset( tt );
             sumw += w;
-            sumcol += w * texture2D( texture, barrelDistortion(barrelDistortion(uv, u_displacement * 0.1), .6 * max_distort * tt * u_displacement ) );
+            sumcol += w * texture2D( texture, barrelDistortion(barrelDistortion(uv, u_displacementY * 0.1), .6 * max_distort * tt * u_displacementY ) );
           }
           
           gl_FragColor = vec4((sumcol / sumw).rgb, u_alpha);
@@ -382,13 +373,17 @@ class Carousel extends React.Component {
           return [drawingBufferWidth, drawingBufferHeight]
         },
         mouse: ({ pixelRatio, viewportHeight, viewportWidth }) => {
-          let x = 0.5 + Math.abs(mouse.x / window.innerWidth) - 1.0
+          let x = 0.5 - mouse.x / window.innerWidth
+          let y = 0.5 - mouse.y / window.innerHeight
+          
           requestAnimationFrame(() => {
-            TweenLite.to(sliderState, 0.1, {
-              offsetX: x,
+            TweenMax.to(sliderState, 1, {
+              mouseX: x,
+              mouseY: y,
+              ease: Back.easeOut,
             }).play()
           })
-          return [sliderState.offsetX, 0]
+          return [sliderState.mouseX, sliderState.mouseY]
         },
         mousewheel: () => {
           return 0
@@ -413,7 +408,7 @@ class Carousel extends React.Component {
       },
       count: 6,
     })
-
+    
     regl.frame(({ time, ...props }) => {
       regl.clear({
         color: [0, 0, 0, 0],
