@@ -44,6 +44,9 @@ class WorksLayout extends React.Component {
     TweenMax.to(this.preloaderNode.querySelector('.bar'), 0.5, {
       width: loaded / total * 100 + '%',
     })
+    TweenMax.to(this.preloaderNode.querySelector('.text'), 0.5, {
+      text: loaded / (total + 1) * 100 + '%',
+    })
   }
 
   render() {
@@ -82,7 +85,7 @@ class WorksLayout extends React.Component {
                 }}
                 ref={el => this.preloaderNode = el} 
               >
-                <div className="dark-gray f7 tracked ttu fw8 nt3 text tc w-100">
+                <div className="near-white f7 fw8 nt3 text tc w-100">
                   loading
                 </div>
                 <div className="absolute left-0 bg-white bar" style={{
