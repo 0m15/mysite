@@ -44,21 +44,22 @@ class WorksLayout extends React.Component {
   }
 
   onPreloadProgress = (loaded, total) => {
+    console.log('loaded', loaded, total)
     if (loaded === total) {
       setTimeout(() => {
         this.setState({
           loaded: loaded === total,
         })
-        TweenMax.to(this.preloaderNode, 0.5, {
+        TweenMax.to(this.preloaderNode, 1, {
           opacity: 0,
         })
       }, 500)
     }
 
-    TweenMax.to(this.preloaderNode.querySelector('.bar'), 0.5, {
+    TweenMax.to(this.preloaderNode.querySelector('.bar'), 1, {
       width: loaded / total * 100 + '%',
     })
-    TweenMax.to(this.preloaderNode.querySelector('.text'), 0.5, {
+    TweenMax.to(this.preloaderNode.querySelector('.text'), 1, {
       text: loaded / (total + 1) * 100 + '%',
     })
   }

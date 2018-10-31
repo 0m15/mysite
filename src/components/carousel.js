@@ -31,13 +31,12 @@ class Carousel extends React.Component {
     
     const preload = async () => {
       const loaded = []
-      let i = 0;
+      let i = 1
       for (const img of images) {
-        const image = await loadImage(img.url, (loaded, total) => {
-          this.props.onPreloadProgress(i, images.length)
-          i++
-        })
+        const image = await loadImage(img.url)
         loaded.push(image)
+        this.props.onPreloadProgress(i, images.length)
+        i++
       }
       return loaded
     }    
@@ -95,6 +94,8 @@ class Carousel extends React.Component {
     const meshes = images.map(img => ({
       texture: regl.texture({
         data: img,
+        premultiplyAlpha: true,
+        mag: 'linear',
       }),
     }))
 
