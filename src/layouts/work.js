@@ -3,6 +3,7 @@ import { Link } from 'gatsby'
 import Helmet from 'react-helmet'
 import TextCover from '../components/text-cover'
 
+
 class WorkLayout extends React.Component {
   render() {
     const { children, data, pageContext, ...rest } = this.props
@@ -11,18 +12,6 @@ class WorkLayout extends React.Component {
       <>
         <Helmet title={node.frontmatter.title} />
         <div>
-          <div
-            className="absolute right-0 pr4 top-0 z-9999"
-            style={{
-              top: '50%',
-            }}
-          >
-            <TextCover>
-              <Link to={pageContext.nextUrl} className="white fw8">
-                Next Project
-              </Link>
-            </TextCover>
-          </div>
           <div
             className="absolute w-100 left-0 pb4 work-detail z-9999"
             style={{

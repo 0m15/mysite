@@ -3,7 +3,7 @@ title: Intellitower
 order: 1
 cover: './images/it-1.jpg'
 url: http://www.hiddentribes.us
-type: Front-end engineering, UI/IDx
+type: Front-end engineering, UI, Interaction Design
 images: 
  - './images/celli.gif'
  - './images/it-flow.jpg'

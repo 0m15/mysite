@@ -1,8 +1,9 @@
 import React from 'react'
 import _regl from 'regl/dist/regl.min'
+import { TweenMax, TimelineLite, Power3, Back } from 'gsap'
 import { mouseChange, mouseWheelChange } from '../utils/mouse'
 import { getMatrix } from '../utils/texture-matrix'
-import { TweenMax, TimelineLite, Power3, Back } from 'gsap'
+import loadImage from '../utils/load-image'
 import vectorizeText from 'vectorize-text'
 import {
   state,
@@ -16,62 +17,6 @@ const mouse = mouseChange()
 const sliderState = state.slider
 TweenMax.defaultEase = Power3.easeInOut
 
-function imgLoad(url, onProgress) {
-  // Create new promise with the Promise() constructor;
-  // This has as its argument a function with two parameters, resolve and reject
-  return new Promise(function(resolve, reject) {
-    const { location } = window
-    // Standard XHR to load an image
-    var request = new XMLHttpRequest()
-    request.open(
-      'GET',
-      location.protocol + '//' + location.hostname + ':' + location.port + url
-    )
-    request.responseType = 'blob'
-
-    // When the request loads, check whether it was successful
-    request.onload = function() {
-      if (request.status === 200) {
-        // If successful, resolve the promise by passing back the request response
-        const image = new Image()
-        const imageURL = window.URL.createObjectURL(request.response)
-        image.src = imageURL
-        image.crossOrigin = ''
-        image.onload = () => {
-          resolve(image)
-        }
-        image.onerror = () => {
-          reject(
-            new Error(
-              'Image was loaded over network but failed to render' + url
-            )
-          )
-        }
-      } else {
-        // If it fails, reject the promise with a error message
-        reject(
-          new Error(
-            "Image didn't load successfully; error code:" + request.statusText
-          )
-        )
-      }
-    }
-
-    request.onprogress = function(evt) {
-      console.log('xxx', evt.loaded, evt.total)
-    }
-
-    request.onerror = function() {
-      // Also deal with the case when the entire request fails to begin with
-      // This is probably a network error, so reject the promise with an appropriate message
-      reject(new Error('There was a network error.'))
-    }
-
-    // Send the request
-    request.send()
-  })
-}
-
 class Carousel extends React.Component {
   buffers = []
   meshes = []
@@ -82,18 +27,37 @@ class Carousel extends React.Component {
   }
 
   componentDidMount() {
-    const images = this.props.images.map(img => imgLoad(img.url))
+    const images = this.props.images // .map(img => loadImage(img.url))
     
-    Promise.all(images).then(images => {
-      this.renderGl(images)
-
-      if (this.props.selectedIndex !== undefined) {
-        openProject({
-          index: this.props.selectedIndex,
+    const preload = async () => {
+      const loaded = []
+      let i = 0;
+      for (const img of images) {
+        const image = await loadImage(img.url, (loaded, total) => {
+          this.props.onPreloadProgress(i, images.length)
+          i++
         })
+        loaded.push(image)
       }
+      return loaded
+    }    
+    
+    preload().then((loaded) => {
+      console.log('loaded', loaded)
+      this.renderGl(loaded)
     })
+
+    // Promise.all(images).then(images => {
+    //   this.renderGl(images)
+
+    //   if (this.props.selectedIndex !== undefined) {
+    //     openProject({
+    //       index: this.props.selectedIndex,
+    //     })
+    //   }
+    // })
   }
+
 
   componentWillUnmount() {
     this.meshes.forEach(m => {
@@ -134,16 +98,9 @@ class Carousel extends React.Component {
     const meshes = images.map(img => ({
       texture: regl.texture({
         data: img,
-        // flipY: true ,
       }),
-      // textMesh: vectorizeText('Intellitower', {
-      //   textAlign: 'center',
-      //   textBaseline: 'top',
-      //   triangles: true,
-      //   font: 'Helvetica',
-      //   fontWeight: 800,
-      // }),
     }))
+
     const feedBackTexture = regl.texture({
       copy: true,
       min: 'linear',
@@ -331,15 +288,6 @@ class Carousel extends React.Component {
         const float reci_num_iter_f = 1.0 / float(num_iter);
 
         void main () {
-          // vec2 uv = (gl_FragCoord.xy / resolution.xy);
-          // float dist = perlin(uv, 4.0) * 0.125;
-          // float dist = sin(uv.y * 3.14 + t * 0.1) * 0.02;
-          // float distY = sin(uv.x * 32.1897 + t * 0.1) * 0.05;
-          // float mapX = 1.0 - cubicPulse(0.25, 0.25, uv.x);
-          // float mapY = 1.0 - cubicPulse(0.25, 0.25, uv.y);
-          // vec2 displaced = vec2(uv.x + dist * u_displacement * mapX, uv.y + (distY * u_displacementY * mapY));
-
-          // --- BARREL DISTORTION ---
           vec4 sumcol = vec4(0.0);
           vec4 sumw = vec4(0.0);	
           for ( int i=0; i<num_iter;++i )
@@ -351,7 +299,6 @@ class Carousel extends React.Component {
           }
           
           gl_FragColor = vec4((sumcol / sumw).rgb, u_alpha);
-          // --------------------------------
         }`,
       attributes: {
         position: [-1, 1, 1, 1, -1, -1, 1, 1, 1, -1, -1, -1],

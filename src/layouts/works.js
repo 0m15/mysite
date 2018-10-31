@@ -3,16 +3,23 @@ import { StaticQuery, graphql, Link } from 'gatsby'
 import { Transition, TransitionGroup } from 'react-transition-group'
 import { TimelineLite, TweenLite, TweenMax } from 'gsap/all'
 import Slideshow from '../components/carousel'
-
-const tl = new TimelineLite({ paused: true })
+import TextCover from '../components/text-cover'
 
 class WorksLayout extends React.Component {
-  state = { index: 0 }
-  scroll = new TimelineLite({ paused: true })
+  state = { index: 0, loaded: false, loadedPct: 0, }
 
+  componentDidMount() {
+    TweenMax.set(this.preloaderNode, {
+      width: 0,
+    })
+  }
+  
   next = () => {
     this.setState({
-      index: Math.min(this.state.index + 1, this.props.data.allMarkdownRemark.edges.length - 1),
+      index: Math.min(
+        this.state.index + 1,
+        this.props.data.allMarkdownRemark.edges.length - 1
+      ),
     })
   }
 
@@ -21,7 +28,24 @@ class WorksLayout extends React.Component {
       index: Math.max(this.state.index - 1, 0),
     })
   }
-  
+
+  onPreloadProgress = (loaded, total) => {
+    if (loaded === total) {
+      setTimeout(() => {
+        this.setState({
+          loaded: loaded === total,
+        })
+        TweenMax.to(this.preloaderNode, 0.5, {
+          opacity: 0,
+        })
+      }, 500)
+    }
+
+    TweenMax.to(this.preloaderNode, 0.5, {
+      width: loaded / total * 100 + '%',
+    })
+  }
+
   render() {
     const { edges: works } = this.props.data.allMarkdownRemark
     const images = works.map(({ node }) => {
@@ -30,8 +54,9 @@ class WorksLayout extends React.Component {
         title: node.frontmatter.title,
       }
     })
-    const selectedIndex = this.props.pageContext.node
-      ? works.findIndex(d => d.node.id === this.props.pageContext.node.id)
+    const { pageContext } = this.props
+    const selectedIndex = pageContext.node
+      ? works.findIndex(d => d.node.id === pageContext.node.id)
       : undefined
     const showControls = selectedIndex === undefined
     const showDetail = !showControls
@@ -45,29 +70,55 @@ class WorksLayout extends React.Component {
               index={this.state.index}
               selectedIndex={selectedIndex}
               images={images}
+              onPreloadProgress={this.onPreloadProgress}
             />
-            {true && <div
-              className="absolute w-100 top-0 left-0 z-9999"
-              style={{
-                transform: 'translateY(-50%)',
-                top: '50%',
-                height: '50vh',
-              }}
-            >
-              <Link
-                className="db w-100 flex items-center justify-center h-100 white"
-                to={
-                  '/works/' +
-                  works[this.state.index].node.frontmatter.title
-                    .replace(/\s/g, '-')
-                    .toLowerCase()
-                }
+            {
+              !this.state.loaded && 
+              <div
+                className="absolute w-100 h-100 top-0 left-0 z-9999 white flex items-center justify-center"
+                style={{
+                  transform: 'translateY(-50%)',
+                  top: '50%',
+                  height: '50vh',
+                }}
               >
-                <h2 className="">
-                  {works[this.state.index].node.frontmatter.title}
-                </h2>
-              </Link>
-            </div>}
+                <div className="dark-gray f7 tracked ttu fw8 nt3">loading</div>
+                <div ref={el => this.preloaderNode = el} className="absolute left-0 bg-white" style={{
+                  height: 1,
+                }}>
+
+                </div>
+              </div>
+            }
+            {this.state.loaded && !showDetail && (
+              <div
+                className="absolute w-100 top-0 left-0 z-9999"
+                style={{
+                  transform: 'translateY(-50%)',
+                  top: '50%',
+                  height: '50vh',
+                }}
+              >
+                <Link
+                  className="db w-100 flex items-center justify-center h-100 white"
+                  to={
+                    '/works/' +
+                    works[this.state.index].node.frontmatter.title
+                      .replace(/\s/g, '-')
+                      .toLowerCase()
+                  }
+                >
+                  <h2 className="">
+                    {works[this.state.index].node.frontmatter.title}
+                  </h2>
+                </Link>
+                <TextCover>
+                  <Link to={pageContext.nextUrl ? pageContext.nextUrl : ''} className="white fw8">
+                    Next Project
+                  </Link>
+                </TextCover>
+              </div>
+            )}
             <div
               className="absolute w-100 z-9999"
               style={{
@@ -78,9 +129,16 @@ class WorksLayout extends React.Component {
               <Transition
                 timeout={1000}
                 appear
+                mountOnEnter
                 in={showControls}
+                onEnter={(node) => {
+                  TweenMax.set(node, {
+                    autoAlpha: 0,
+                    y: 30,
+                  })
+                }}
                 addEndListener={(node, done) => {
-                  TweenLite.to(node, 1, {
+                  TweenMax.to(node, 1, {
                     y: showControls ? 0 : 30,
                     autoAlpha: showControls ? 1 : 0,
                     onComplete: done,
@@ -120,25 +178,45 @@ class WorksLayout extends React.Component {
                 TweenMax.set(textCover, {
                   x: '-101%',
                 })
-                TweenMax.staggerTo(fadeElements, 0.75, {
-                  // y: 0,
-                  opacity: 1,
-                }, 0.1)
-                TweenMax.staggerTo(textCover, 0.75, {
-                  x: '101%',
-                  delay: 0.1,
-                }, 0.1)
+                TweenMax.staggerTo(
+                  fadeElements,
+                  0.75,
+                  {
+                    // y: 0,
+                    opacity: 1,
+                  },
+                  0.1
+                )
+                TweenMax.staggerTo(
+                  textCover,
+                  0.75,
+                  {
+                    x: '101%',
+                    delay: 0.1,
+                  },
+                  0.1
+                )
               }}
               onExit={node => {
                 TweenMax.killTweensOf(node)
-                TweenMax.staggerTo(node.querySelectorAll('.fade'), 0.75, {
-                  // y: -30,
-                  opacity: 0,
-                  delay: 0.1,
-                }, 0.1)
-                TweenMax.staggerTo(node.querySelectorAll('.text-cover'), 0.75, {
-                  x: '-101%',
-                }, 0.1)
+                TweenMax.staggerTo(
+                  node.querySelectorAll('.fade'),
+                  0.75,
+                  {
+                    // y: -30,
+                    opacity: 0,
+                    delay: 0.1,
+                  },
+                  0.1
+                )
+                TweenMax.staggerTo(
+                  node.querySelectorAll('.text-cover'),
+                  0.75,
+                  {
+                    x: '-101%',
+                  },
+                  0.1
+                )
               }}
               // addEndListener={(node, done) => {
               //   TweenMax.eventCallback("onComplete", () => {
