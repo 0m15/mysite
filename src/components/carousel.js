@@ -243,8 +243,6 @@ class Carousel extends React.Component {
       vert: `
       precision lowp float;
       attribute vec2 position;
-      uniform vec2 mouse;
-      uniform float u_speed;
       uniform mat4 matrix;
       varying vec2 uv;
 
@@ -272,9 +270,8 @@ class Carousel extends React.Component {
       void main () {
         uv = position.xy * .5 + .5;
         // float dist = sin(uv.y * 3.14 + t * 0.1) * 0.02;
-        vec2 mouseOffset = vec2(mouse.x * u_speed, mouse.y * u_speed);
         vec2 pos = vec2(position.x, position.y);
-        gl_Position = distort(matrix * vec4(pos + mouseOffset, 0, 1));
+        gl_Position = distort(matrix * vec4(pos, 0, 1));
         // gl_Position = matrix * vec4(position, 0, 1);
       }`,
       frag: `
@@ -287,6 +284,8 @@ class Carousel extends React.Component {
         uniform float u_alpha;
         uniform float u_displacement;
         uniform float u_displacementY;
+        uniform vec2 mouse;
+        uniform float u_speed;  
         varying vec2 uv;
         varying float v_rand;
 
@@ -303,13 +302,12 @@ class Carousel extends React.Component {
           return coord + cc * dist * amt;
         }
         
-        float sat( float t )
-        {
+        float sat( float t ) {
           return clamp( t, 0.0, 1.0 );
         }
         
         float linterp( float t ) {
-          return sat( 1.0 - abs( 2.0*t - 1.0 ) );
+          return sat( 1.0 - abs( 2.0 * t - 1.0 ) );
         }
         
         float remap( float t, float a, float b ) {
@@ -318,26 +316,28 @@ class Carousel extends React.Component {
         
         vec4 spectrum_offset( float t ) {
           vec4 ret;
-          float lo = step(t,0.5);
-          float hi = 1.0-lo;
+          float lo = step(t, 0.5);
+          float hi = 1.0 - lo;
           float w = linterp( remap( t, 1.0/6.0, 5.0/6.0 ) );
           ret = vec4(lo,1.0,hi, 1.) * vec4(1.0-w, w, 1.0-w, 1.);
         
           return pow( ret, vec4(1.0/2.2) );
         }
         
-        const float max_distort = 0.1;
-        const int num_iter = 3;
+        vec2 mouseOffset = vec2(mouse.x, mouse.y);
+
+        const float max_distort = 0.125;
+        const int num_iter = 8;
         const float reci_num_iter_f = 1.0 / float(num_iter);
 
         void main () {
           // vec2 uv = (gl_FragCoord.xy / resolution.xy);
           // float dist = perlin(uv, 4.0) * 0.125;
-          float dist = sin(uv.y * 3.14 + t * 0.1) * 0.02;
-          float distY = sin(uv.x * 32.1897 + t * 0.1) * 0.05;
-          float mapX = 1.0 - cubicPulse(0.25, 0.25, uv.x);
-          float mapY = 1.0 - cubicPulse(0.25, 0.25, uv.y);
-          vec2 displaced = vec2(uv.x + dist * u_displacement * mapX, uv.y + (distY * u_displacementY * mapY));
+          // float dist = sin(uv.y * 3.14 + t * 0.1) * 0.02;
+          // float distY = sin(uv.x * 32.1897 + t * 0.1) * 0.05;
+          // float mapX = 1.0 - cubicPulse(0.25, 0.25, uv.x);
+          // float mapY = 1.0 - cubicPulse(0.25, 0.25, uv.y);
+          // vec2 displaced = vec2(uv.x + dist * u_displacement * mapX, uv.y + (distY * u_displacementY * mapY));
 
           // --- BARREL DISTORTION ---
           vec4 sumcol = vec4(0.0);
@@ -398,11 +398,11 @@ class Carousel extends React.Component {
         func: {
           srcRGB: 'src alpha',
           srcAlpha: 1,
-          dstRGB: 'src color',
+          dstRGB: 'one minus src color',
           dstAlpha: 1,
         },
         equation: {
-          rgb: 'subtract',
+          rgb: 'add',
           alpha: 'add',
         },
       },

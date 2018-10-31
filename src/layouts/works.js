@@ -46,7 +46,7 @@ class WorksLayout extends React.Component {
               selectedIndex={selectedIndex}
               images={images}
             />
-            {!showDetail && <div
+            {true && <div
               className="absolute w-100 top-0 left-0 z-9999"
               style={{
                 transform: 'translateY(-50%)',
