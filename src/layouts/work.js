@@ -22,13 +22,13 @@ class WorkLayout extends React.Component {
             </span>
           </div>
         <div
-          className="absolute w-100 left-0 pb4 work-detail"
+          className="absolute w-100 left-0 pb4 work-detail z-9999"
           style={{
             top: '80%',
           }}
         >
           <div
-            className="bg-near-black white fade"
+            className="white fade"
             style={{
               height: '20vh',
             }}

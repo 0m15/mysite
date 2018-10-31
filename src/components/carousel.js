@@ -248,7 +248,7 @@ class Carousel extends React.Component {
       uniform mat4 matrix;
       varying vec2 uv;
 
-      float barrelPower = 0.25;
+      float barrelPower = 1.1;
       
       vec4 distort(vec4 p) {
         vec2 v = p.xy * p.w;
@@ -428,8 +428,8 @@ class Carousel extends React.Component {
             u_noise: 4.0,
             matrix: getMatrix({
               image: images[i],
-              width: this.canvas.clientWidth,
-              height: this.canvas.clientHeight,
+              width: window.innerWidth,
+              height: window.innerHeight,
               offset: [i, meshProps.offsetY],
               scale: meshProps.scale,
               pan: sliderState.x,

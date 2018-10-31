@@ -1,7 +1,7 @@
 import { TimelineLite, TweenLite, TweenMax,
   Power3, Elastic } from 'gsap'
 
-const MAX_DISPLACEMENT = 12
+const MAX_DISPLACEMENT = 6
 const timeline = new TimelineLite({ paused: true })
 
 const DEFAULT_PROPS = {
@@ -31,7 +31,7 @@ function tweenDisplace(fromIndex, toIndex, duration = 1, prop) {
   TweenMax.killTweensOf(__state.slider[prop])
   const values = [
     { [prop]: 0 },
-    { [prop]: toIndex > fromIndex ? MAX_DISPLACEMENT : -MAX_DISPLACEMENT },
+    { [prop]: toIndex > fromIndex ? MAX_DISPLACEMENT : MAX_DISPLACEMENT * 0.5 },
     { [prop]: 0 },
   ]
   TweenMax.to(__state.slider, duration, {
@@ -61,7 +61,7 @@ export function openProject({ index }) {
   TweenMax.to(__state.slider, 0.5, {
     x: index,
   })
-  tweenDisplace(0, 1, 2, 'displaceY')
+  tweenDisplace(0, 1, 3, 'displaceY')
 }
 
 export function closeProject() {
@@ -70,7 +70,7 @@ export function closeProject() {
     alpha: 1,
     delay: 0.1,
   }).play()
-  tweenDisplace(1, 0, 1, 'displaceY')
+  tweenDisplace(1, 0, 2, 'displaceY')
 }
 
 // export as immutable object
