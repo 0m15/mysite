@@ -11,6 +11,7 @@ import {
   openProject,
   closeProject,
   setMeshProps,
+  fadeInImages,
 } from '../utils/choreography'
 
 const mouse = mouseChange()
@@ -28,10 +29,10 @@ class Carousel extends React.Component {
 
   componentDidMount() {
     const images = this.props.images // .map(img => loadImage(img.url))
-    
+
     const preload = async () => {
       const loaded = []
-      let i = 0;
+      let i = 0
       for (const img of images) {
         const image = await loadImage(img.url, (loaded, total) => {
           this.props.onPreloadProgress(i, images.length)
@@ -40,21 +41,21 @@ class Carousel extends React.Component {
         loaded.push(image)
       }
       return loaded
-    }    
-    
-    preload().then((loaded) => {
-      console.log('loaded', loaded)
-      this.renderGl(loaded)
+    }
 
+    preload().then(loaded => {
+      this.renderGl(loaded)
+      setTimeout(() => {
+        fadeInImages()
       if (this.props.selectedIndex !== undefined) {
         openProject({
           index: this.props.selectedIndex,
         })
       }
+      }, 250)
+      
     })
-    
   }
-
 
   componentWillUnmount() {
     this.meshes.forEach(m => {
@@ -319,7 +320,7 @@ class Carousel extends React.Component {
         mouse: ({ pixelRatio, viewportHeight, viewportWidth }) => {
           let x = 0.5 - mouse.x / window.innerWidth
           let y = 0.5 - mouse.y / window.innerHeight
-          
+
           requestAnimationFrame(() => {
             TweenMax.to(sliderState, 1, {
               mouseX: x,
@@ -352,7 +353,7 @@ class Carousel extends React.Component {
       },
       count: 6,
     })
-    
+
     regl.frame(({ time, ...props }) => {
       regl.clear({
         color: [0, 0, 0, 0],

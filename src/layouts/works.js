@@ -45,7 +45,7 @@ class WorksLayout extends React.Component {
       width: loaded / total * 100 + '%',
     })
     TweenMax.to(this.preloaderNode.querySelector('.text'), 0.5, {
-      text: loaded / (total + 1) * 100 + '%',
+      text: Math.min(100, loaded / (total) * 100) + '%',
     })
   }
 
