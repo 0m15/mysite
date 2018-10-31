@@ -19,14 +19,28 @@ class WorksLayout extends React.Component {
       index: Math.min(
         this.state.index + 1,
         this.props.data.allMarkdownRemark.edges.length - 1
-      ),
+      )
+    }, () => {
+      TweenMax.to(this.titleNode, 0.5, {
+        text: { value: this.props.data.allMarkdownRemark.edges[this.state.index].node.frontmatter.title,
+        delimiter: ' ',}
+      })
     })
+    
   }
 
   prev = () => {
     this.setState({
       index: Math.max(this.state.index - 1, 0),
+    }, () => {
+      TweenMax.to(this.titleNode, 0.5, {
+        text: { value: this.props.data.allMarkdownRemark.edges[this.state.index].node.frontmatter.title,
+        delimiter: ' ',}
+      })
     })
+    // TweenMax.to(this.preloaderNode.querySelector('.text'), 0.5, {
+    //   text: loaded / (total + 1) * 100 + '%',
+    // })
   }
 
   onPreloadProgress = (loaded, total) => {
@@ -86,7 +100,6 @@ class WorksLayout extends React.Component {
                 ref={el => this.preloaderNode = el} 
               >
                 <div className="near-white f7 tracked ttu fw8 nt3 text tc w-100">
-                  loading
                 </div>
                 <div className="absolute left-0 bg-white bar" style={{
                   height: 1,
@@ -105,7 +118,7 @@ class WorksLayout extends React.Component {
                 }}
               >
                 <Link
-                  className="db w-50 center flex items-center justify-center h-100 white"
+                  className="db w-50 center flex justify-center h-100 white relative"
                   to={
                     '/works/' +
                     works[this.state.index].node.frontmatter.title
@@ -113,8 +126,8 @@ class WorksLayout extends React.Component {
                       .toLowerCase()
                   }
                 >
-                  <h2 className="">
-                    {works[this.state.index].node.frontmatter.title}
+                  <h2 className="absolute bottom-0 nt4 ma0-ns pa0 f5 f4-l" style={{ bottom: '10%' }} ref={el => this.titleNode = el}>
+                    {/* {works[this.state.index].node.frontmatter.title} */}
                   </h2>
                 </Link>
               </div>
