@@ -11,7 +11,6 @@ import {
   openProject,
   closeProject,
   setMeshProps,
-  fadeInImages,
 } from '../utils/choreography'
 
 const mouse = mouseChange()
@@ -29,10 +28,10 @@ class Carousel extends React.Component {
 
   componentDidMount() {
     const images = this.props.images // .map(img => loadImage(img.url))
-
+    
     const preload = async () => {
       const loaded = []
-      let i = 0
+      let i = 0;
       for (const img of images) {
         const image = await loadImage(img.url, (loaded, total) => {
           this.props.onPreloadProgress(i, images.length)
@@ -41,21 +40,21 @@ class Carousel extends React.Component {
         loaded.push(image)
       }
       return loaded
-    }
-
-    preload().then(loaded => {
+    }    
+    
+    preload().then((loaded) => {
+      console.log('loaded', loaded)
       this.renderGl(loaded)
-      setTimeout(() => {
-        fadeInImages()
+
       if (this.props.selectedIndex !== undefined) {
         openProject({
           index: this.props.selectedIndex,
         })
       }
-      }, 250)
-      
     })
+    
   }
+
 
   componentWillUnmount() {
     this.meshes.forEach(m => {
@@ -278,6 +277,27 @@ class Carousel extends React.Component {
         
           return pow( ret, vec4(1.0/2.2) );
         }
+
+        vec4 barrel_blur() {
+          // vec2 uv=(gl_FragCoord.xy/resolution.xy*.5)+.25;
+          vec4 a1=texture2D(texture, barrelDistortion(uv,0.0));
+          vec4 a2=texture2D(texture, barrelDistortion(uv,0.2));
+          vec4 a3=texture2D(texture, barrelDistortion(uv,0.4));
+          vec4 a4=texture2D(texture, barrelDistortion(uv,0.6));
+          
+          vec4 a5=texture2D(texture, barrelDistortion(uv,0.8));
+          vec4 a6=texture2D(texture, barrelDistortion(uv,1.0));
+          vec4 a7=texture2D(texture, barrelDistortion(uv,1.2));
+          vec4 a8=texture2D(texture, barrelDistortion(uv,1.4));
+          
+          vec4 a9=texture2D(texture, barrelDistortion(uv,1.6));
+          vec4 a10=texture2D(texture, barrelDistortion(uv,1.8));
+          vec4 a11=texture2D(texture, barrelDistortion(uv,2.0));
+          vec4 a12=texture2D(texture, barrelDistortion(uv,2.2));
+
+          vec4 tx=(a1+a2+a3+a4+a5+a6+a7+a8+a9+a10+a11+a12)/12.;
+          return tx;
+        }
         
         vec2 mouseOffset = vec2(mouse.x, mouse.y);
 
@@ -296,6 +316,7 @@ class Carousel extends React.Component {
             sumcol += w * texture2D( texture, barrelDistortion(barrelDistortion(uv, u_displacementY * 0.1), .6 * max_distort * tt * u_displacementY ) );
           }
           
+          // vec4 blur = barrelBlur();
           gl_FragColor = vec4((sumcol / sumw).rgb, u_alpha);
         }`,
       attributes: {
@@ -320,7 +341,7 @@ class Carousel extends React.Component {
         mouse: ({ pixelRatio, viewportHeight, viewportWidth }) => {
           let x = 0.5 - mouse.x / window.innerWidth
           let y = 0.5 - mouse.y / window.innerHeight
-
+          
           requestAnimationFrame(() => {
             TweenMax.to(sliderState, 1, {
               mouseX: x,
@@ -353,7 +374,7 @@ class Carousel extends React.Component {
       },
       count: 6,
     })
-
+    
     regl.frame(({ time, ...props }) => {
       regl.clear({
         color: [0, 0, 0, 0],

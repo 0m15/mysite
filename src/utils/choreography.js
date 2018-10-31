@@ -5,8 +5,8 @@ const MAX_DISPLACEMENT = 6
 const timeline = new TimelineLite({ paused: true })
 
 const DEFAULT_PROPS = {
-  scale: 0.25,
-  alpha: 0,
+  scale: 0.35,
+  alpha: 1,
   offsetY: 0,
 }
 
@@ -20,7 +20,11 @@ const __state = {
 }
 
 export function setMeshProps(images) {
-  __state.slider.props = images.map((d, i) => DEFAULT_PROPS)
+  __state.slider.props = images.map((d, i) => ({
+    scale: 0.35,
+    alpha: 1,
+    offsetY: 0,
+  }))
 }
 
 function tweenDisplace(fromIndex, toIndex, duration = 1, prop) {
@@ -57,25 +61,18 @@ export function openProject({ index }) {
   TweenMax.to(__state.slider, 0.5, {
     x: index,
   })
-  tweenDisplace(0, 1, 3, 'displaceY')
+  tweenDisplace(0, 1, 2, 'displaceY')
 }
 
 export function closeProject() {
-  TweenLite.to(__state.slider.props, 1.0, {
+  TweenLite.to(__state.slider.props, 0.5, {
     scale: 0.35,
     alpha: 1,
-    delay: 0.1,
+    delay: 0.25,
   }).play()
   tweenDisplace(1, 0, 2, 'displaceY')
 }
 
-export function fadeInImages() {
-  TweenMax.staggerTo(__state.slider.props, 0.5, {
-    alpha: 1,
-    scale: 0.35,
-  }, 0.5)
-  tweenDisplace(1, 0, 2, 'displaceY')
-}
 
 // export as immutable object
 export const state = Object.freeze(__state)

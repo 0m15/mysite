@@ -25,6 +25,21 @@ class WorkLayout extends React.Component {
               }}
             >
               <div className="mw7 center ph4 relative z-9999">
+                <div
+                  className="absolute flex items-center w-100 ph4 top-0 left-0 z-9999"
+                  style={{
+                    transform: 'translateY(-100%)',
+                    top: '50%',
+                    height: '50vh',
+                  }}
+                >
+                    <h2 className="ma0 pa0">
+                      <TextCover text={node.frontmatter.title} />
+                    </h2>
+                    <div className="ml-auto">
+                      <Link className="white fw8" to={pageContext.nextUrl}>Next Project</Link>
+                    </div>
+                </div>
                 {/* <h2 className="f4 ma0 pb3">
                   <span className="dib relative overflow-hidden">
                     <span className="fade">{node.frontmatter.title}</span>

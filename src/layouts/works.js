@@ -45,7 +45,7 @@ class WorksLayout extends React.Component {
       width: loaded / total * 100 + '%',
     })
     TweenMax.to(this.preloaderNode.querySelector('.text'), 0.5, {
-      text: Math.min(100, loaded / (total) * 100) + '%',
+      text: loaded / (total + 1) * 100 + '%',
     })
   }
 
@@ -85,7 +85,7 @@ class WorksLayout extends React.Component {
                 }}
                 ref={el => this.preloaderNode = el} 
               >
-                <div className="near-white f7 fw8 nt3 text tc w-100">
+                <div className="near-white f7 tracked ttu fw8 nt3 text tc w-100">
                   loading
                 </div>
                 <div className="absolute left-0 bg-white bar" style={{
@@ -105,7 +105,7 @@ class WorksLayout extends React.Component {
                 }}
               >
                 <Link
-                  className="db w-100 flex items-center justify-center h-100 white"
+                  className="db w-50 center flex items-center justify-center h-100 white"
                   to={
                     '/works/' +
                     works[this.state.index].node.frontmatter.title
@@ -117,11 +117,6 @@ class WorksLayout extends React.Component {
                     {works[this.state.index].node.frontmatter.title}
                   </h2>
                 </Link>
-                <TextCover>
-                  <Link to={pageContext.nextUrl ? pageContext.nextUrl : ''} className="white fw8">
-                    Next Project
-                  </Link>
-                </TextCover>
               </div>
             )}
             <div
@@ -189,6 +184,7 @@ class WorksLayout extends React.Component {
                   {
                     // y: 0,
                     opacity: 1,
+                    delay: 0.1,
                   },
                   0.1
                 )
@@ -197,30 +193,31 @@ class WorksLayout extends React.Component {
                   0.75,
                   {
                     x: '101%',
-                    delay: 0.1,
+                    delay: 0.2,
                   },
                   0.1
                 )
               }}
               onExit={node => {
+                const fadeInElements = node.querySelectorAll('.fade')
                 TweenMax.killTweensOf(node)
                 TweenMax.staggerTo(
-                  node.querySelectorAll('.fade'),
+                  fadeInElements,
                   0.75,
                   {
                     // y: -30,
                     opacity: 0,
                     delay: 0.1,
                   },
-                  0.1
+                  -0.01,
                 )
                 TweenMax.staggerTo(
                   node.querySelectorAll('.text-cover'),
-                  0.75,
+                  0.5,
                   {
                     x: '-101%',
                   },
-                  0.1
+                  -0.1
                 )
               }}
               // addEndListener={(node, done) => {
