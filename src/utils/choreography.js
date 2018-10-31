@@ -56,7 +56,7 @@ export function openProject({ index }) {
   })
   TweenMax.to(__state.slider.props[index], 0.5, {
     scale: 1.1,
-    alpha: .5,
+    alpha: .35,
   })
   TweenMax.to(__state.slider, 0.5, {
     x: index,

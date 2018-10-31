@@ -9,7 +9,7 @@ class WorksLayout extends React.Component {
   state = { index: 0, loaded: false, loadedPct: 0, }
 
   componentDidMount() {
-    TweenMax.set(this.preloaderNode, {
+    TweenMax.set(this.preloaderNode.querySelector('.bar'), {
       width: 0,
     })
   }
@@ -41,7 +41,7 @@ class WorksLayout extends React.Component {
       }, 500)
     }
 
-    TweenMax.to(this.preloaderNode, 0.5, {
+    TweenMax.to(this.preloaderNode.querySelector('.bar'), 0.5, {
       width: loaded / total * 100 + '%',
     })
   }
@@ -73,7 +73,6 @@ class WorksLayout extends React.Component {
               onPreloadProgress={this.onPreloadProgress}
             />
             {
-              !this.state.loaded && 
               <div
                 className="absolute w-100 h-100 top-0 left-0 z-9999 white flex items-center justify-center"
                 style={{
@@ -81,9 +80,12 @@ class WorksLayout extends React.Component {
                   top: '50%',
                   height: '50vh',
                 }}
+                ref={el => this.preloaderNode = el} 
               >
-                <div className="dark-gray f7 tracked ttu fw8 nt3">loading</div>
-                <div ref={el => this.preloaderNode = el} className="absolute left-0 bg-white" style={{
+                <div className="dark-gray f7 tracked ttu fw8 nt3 text tc w-100">
+                  loading
+                </div>
+                <div className="absolute left-0 bg-white bar" style={{
                   height: 1,
                 }}>
 

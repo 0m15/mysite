@@ -45,17 +45,14 @@ class Carousel extends React.Component {
     preload().then((loaded) => {
       console.log('loaded', loaded)
       this.renderGl(loaded)
+
+      if (this.props.selectedIndex !== undefined) {
+        openProject({
+          index: this.props.selectedIndex,
+        })
+      }
     })
-
-    // Promise.all(images).then(images => {
-    //   this.renderGl(images)
-
-    //   if (this.props.selectedIndex !== undefined) {
-    //     openProject({
-    //       index: this.props.selectedIndex,
-    //     })
-    //   }
-    // })
+    
   }
 
 
