@@ -2,10 +2,6 @@ import React from 'react'
 import Link from 'gatsby-link'
 
 class Header extends React.Component {
-  componentDidMount = () => {
-    console.log('mount#jheader')
-  }
-
   render() {
     return (
       <div className="fixed w-100 pt4 pb4 center z-9999 top-0">
