@@ -204,13 +204,13 @@ class WorksLayout extends React.Component {
                       ref={el => (this.preloaderLabel = el)}
                     />
                     <div
-                      className="absolute left-0 bg-dark-gray bar"
+                      className="absolute left-0 bg-near-white bar"
                       style={{
                         height: 1,
                       }}
                     />
                     <div
-                      className="bg-white"
+                      className="bg-near-white"
                       ref={el => (this.dragCursor = el)}
                       style={{
                         position: 'absolute',
