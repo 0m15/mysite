@@ -10,18 +10,20 @@ class WorkLayout extends React.Component {
     return (
       <>
         <Helmet title={node.frontmatter.title} />
-        <div
-          className="absolute w-100 top-0 left-0 pb4 work-detail z-999 vh-100 white"
-        >
+        <div className="absolute w-100 top-0 left-0 pb4 work-detail z-999 vh-100 white">
           <div className="mw8 center ph4 flex flex-column justify-center h-100">
-            <div className="fade absolute top-0 f4" style={{ top: '25%', }}>
-              <Link className="white mr3 no-underline" style={{ marginLeft: -30 }} to={'/'}>
-              ← All projects
+            <div className="fade absolute top-0 f4" style={{ top: '25%' }}>
+              <Link
+                className="white mr3 no-underline"
+                style={{ marginLeft: -30 }}
+                to={'/'}
+              >
+                ← All projects
               </Link>
               /
               <Link className="white ml3 no-underline" to={pageContext.nextUrl}>
-                    Next Project
-                  </Link>
+                Next Project
+              </Link>
             </div>
             <div>
               <div
@@ -34,9 +36,7 @@ class WorkLayout extends React.Component {
                 <h2 className="ma0 pa0 f1 serif fw1">
                   <TextCover text={node.frontmatter.title} />
                 </h2>
-                <div className="ml-auto">
-                  
-                </div>
+                <div className="ml-auto" />
               </div>
             </div>
             <div className="flex f7">

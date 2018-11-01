@@ -57,9 +57,9 @@ export function drag({ toIndex, speed }) {
   TweenMax.to(__state.slider.props.filter((p, i) => i === Math.floor(toIndex)), 0.25, {
     scale: 0.3,
   })
-  TweenMax.to(__state.slider, 0.5, {
-    displaceY: speed * 0.5,
-  })
+  // TweenMax.to(__state.slider, 0.5, {
+  //   displaceY: speed * 0.2,
+  // })
 }
 
 export function dragDecay(snap) {
@@ -70,9 +70,9 @@ export function dragDecay(snap) {
   TweenMax.to(__state.slider.props, 0.25, {
     scale: 0.35,
   })
-  TweenMax.to(__state.slider, 0.25, {
-    displaceY: 0,
-  })
+  // TweenMax.to(__state.slider, 0.25, {
+  //   displaceY: 0,
+  // })
 }
 
 export function openProject({ index }) {
