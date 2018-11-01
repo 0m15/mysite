@@ -24,16 +24,16 @@ class WorkLayout extends React.Component {
                 height: '20vh',
               }}
             >
-              <div className="mw7 center ph4 relative z-9999">
+              <div className="mw8 center ph4 relative z-9999">
                 <div
                   className="absolute flex items-center w-100 ph4 top-0 left-0 z-9999"
                   style={{
                     transform: 'translateY(-100%)',
-                    top: '50%',
+                    top: '0',
                     height: '50vh',
                   }}
                 >
-                    <h2 className="ma0 pa0">
+                    <h2 className="ma0 pa0 f1 serif fw1">
                       <TextCover text={node.frontmatter.title} />
                     </h2>
                     <div className="ml-auto">
@@ -52,11 +52,11 @@ class WorkLayout extends React.Component {
                   </span>
                 </h2> */}
                 <div className="flex f7">
-                  <div className="w-third">
+                  <div className="w-third f7">
                     {node.frontmatter.type.split(',').map((t, i) => {
                       return <React.Fragment key={i}>
                         <TextCover text={t} />
-                          {i < node.frontmatter.type.split(',').length -1  && ', '}
+                          {i < node.frontmatter.type.split(',').length -1  && <br />}
                         </React.Fragment>
                     })}
                   </div>
@@ -80,13 +80,13 @@ class WorkLayout extends React.Component {
               Scroll
             </div> */}
             </div>
-            <div
+            {/* <div
               className="bg-white pt5"
               style={{
                 minHeight: '100vh',
               }}
             >
-              <div className="mw7 center ph4 pt4 fade">
+              <div className="mw8 center ph4 pt4 fade">
                 <p className="f6 lh-copy ma0 pa0">{node.excerpt}</p>
                 <div className="tc">
                   {node.frontmatter.images.map((image, i) => {
@@ -98,7 +98,7 @@ class WorkLayout extends React.Component {
                   })}
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </>

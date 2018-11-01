@@ -1,11 +1,16 @@
 @import './variables.scss';
 @import '~tachyons-sass/tachyons.scss';
+@import url('https://fonts.googleapis.com/css?family=EB+Garamond:500,700');
 
 html,
 body {
   font-family: $sans-serif;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+}
+
+.serif {
+  font-family: 'EB Garamond';
 }
 
 .no-cursor {
@@ -23,4 +28,8 @@ body {
 
 canvas {
   z-index: 1 !important;
+}
+
+.hover:hover {
+  opacity: .5;
 }

@@ -1,9 +1,10 @@
 import React from 'react'
 import { StaticQuery, graphql, Link } from 'gatsby'
 import { Transition, TransitionGroup } from 'react-transition-group'
-import { TimelineLite, TweenLite, TweenMax } from 'gsap/all'
+import { TimelineLite, TweenLite, TweenMax, Draggable } from 'gsap/all'
 import Slideshow from '../components/carousel'
 import TextCover from '../components/text-cover'
+import { drag, dragDecay } from '../utils/choreography'
 
 class WorksLayout extends React.Component {
   state = { index: 0, loaded: false, loadedPct: 0 }
@@ -12,6 +13,43 @@ class WorksLayout extends React.Component {
   componentDidMount() {
     TweenMax.set(this.preloaderNode.querySelector('.bar'), {
       width: 0,
+    })
+    if (this.dragCursor) {
+      this.dragger = Draggable.create(this.dragCursor, {
+        type: 'x',
+        edgeResistance: 0.65,
+        bounds: this.dragCursor.parentNode,
+        throwProps: true,
+        onDrag: this.onDrag,
+        onDragEnd: this.onDragEnd,
+      })
+    }
+  }
+
+  onDragEnd = evt => {
+    const snap = Math.max(
+      0,
+      Math.round(
+        (this.dragger[0].x / this.dragger[0].maxX) * (this.props.data.allMarkdownRemark.edges.length - 1)
+      )
+    )
+    console.log('snap', snap)
+    this.setState(
+      {
+        index: snap,
+      },
+      () => {
+        dragDecay(snap)
+      }
+    )
+  }
+
+  onDrag = evt => {
+    const index =
+      (this.dragger[0].x / this.dragger[0].maxX) * (this.props.data.allMarkdownRemark.edges.length - 1)
+    drag({
+      fromIndex: 0,
+      toIndex: index,
     })
   }
 
@@ -54,15 +92,15 @@ class WorksLayout extends React.Component {
 
   onPreloadProgress = (loaded, total) => {
     if (loaded === total) {
-      TweenMax.to(this.preloaderNode, 1, {
-        x: '100%',
-        delay: 1.5,
-        onComplete: () => {
-          this.setState({
-            loaded: loaded === total,
-          })
-        },
-      })
+      // TweenMax.to(this.preloaderNode.querySelector('.bar'), 1, {
+      //   x: '97%',
+      //   delay: 1.5,
+      //   onComplete: () => {
+      //     this.setState({
+      //       loaded: loaded === total,
+      //     })
+      //   },
+      // })
     }
     TweenMax.to(this.preloaderNode.querySelector('.bar'), 1, {
       width: (loaded / total) * 100 + '%',
@@ -98,28 +136,6 @@ class WorksLayout extends React.Component {
               images={images}
               onPreloadProgress={this.onPreloadProgress}
             />
-            {
-              <div
-                className="absolute w-100 h-100 top-0 left-0 z-9999 white flex items-center justify-center"
-                style={{
-                  transform: 'translateY(-50%)',
-                  top: '50%',
-                  height: '50vh',
-                }}
-                ref={el => (this.preloaderNode = el)}
-              >
-                <div
-                  className="near-white f7 tracked ttu fw8 nt3 text tc w-100"
-                  ref={el => (this.preloaderLabel = el)}
-                />
-                <div
-                  className="absolute left-0 bg-white bar"
-                  style={{
-                    height: 1,
-                  }}
-                />
-              </div>
-            }
             {!showDetail && (
               <div
                 className="absolute w-100 top-0 left-0 z-9999"
@@ -151,19 +167,18 @@ class WorksLayout extends React.Component {
             <div
               className="absolute w-100 z-9999"
               style={{
-                bottom: '5%',
+                bottom: '10%',
                 left: 0,
               }}
             >
               <Transition
                 timeout={1000}
                 appear
-                mountOnEnter
                 in={showControls}
                 onEnter={node => {
                   TweenMax.set(node, {
-                    autoAlpha: 0,
-                    y: 30,
+                    autoAlpha: 1,
+                    y: 0,
                   })
                 }}
                 addEndListener={(node, done) => {
@@ -175,7 +190,40 @@ class WorksLayout extends React.Component {
                   })
                 }}
               >
-                <div>
+                <div className="relative mw8 center">
+                  <div
+                    className="absolute w-100 h-100 top-0 left-0 z-9999 white flex items-center justify-center"
+                    style={{
+                      transform: 'translateY(-50%)',
+                      top: '50%',
+                      height: '50vh',
+                    }}
+                    ref={el => (this.preloaderNode = el)}
+                  >
+                    <div
+                      className="near-white f7 tracked ttu fw8 nt3 text tc w-100"
+                      ref={el => (this.preloaderLabel = el)}
+                    />
+                    <div
+                      className="absolute left-0 bg-white bar"
+                      style={{
+                        height: 1,
+                      }}
+                    />
+                    <div
+                      ref={el => (this.dragCursor = el)}
+                      style={{
+                        position: 'absolute',
+                        left: 0,
+                        background: '#fff',
+                        width: 16,
+                        height: 16,
+                        borderRadius: '50%',
+                      }}
+                    />
+                  </div>
+                </div>
+                {/* <div>
                   <div className="center flex justify-center w-50 white">
                     <div className="w-40 tc f7 pointer" onClick={this.prev}>
                       Prev
@@ -184,7 +232,7 @@ class WorksLayout extends React.Component {
                       Next
                     </div>
                   </div>
-                </div>
+                </div> */}
               </Transition>
             </div>
           </div>
