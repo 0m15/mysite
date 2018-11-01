@@ -11,7 +11,9 @@ import {
   openProject,
   closeProject,
   setMeshProps,
+  fadeInSlides,
 } from '../utils/choreography'
+import { getFragmentDefinition } from 'apollo-utilities';
 
 const mouse = mouseChange()
 const sliderState = state.slider
@@ -44,16 +46,15 @@ class Carousel extends React.Component {
     preload().then((loaded) => {
       console.log('loaded', loaded)
       this.renderGl(loaded)
-
       if (this.props.selectedIndex !== undefined) {
         openProject({
           index: this.props.selectedIndex,
         })
+      } else {
+        fadeInSlides()
       }
-    })
-    
+    })    
   }
-
 
   componentWillUnmount() {
     this.meshes.forEach(m => {

@@ -54,10 +54,10 @@ class WorkLayout extends React.Component {
                 <div className="flex f7">
                   <div className="w-third">
                     {node.frontmatter.type.split(',').map((t, i) => {
-                      return <>
-                        <TextCover text={t} key={i} />
+                      return <React.Fragment key={i}>
+                        <TextCover text={t} />
                           {i < node.frontmatter.type.split(',').length -1  && ', '}
-                        </>
+                        </React.Fragment>
                     })}
                   </div>
                   <div className="w-third fade tc">

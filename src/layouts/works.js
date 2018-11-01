@@ -6,62 +6,70 @@ import Slideshow from '../components/carousel'
 import TextCover from '../components/text-cover'
 
 class WorksLayout extends React.Component {
-  state = { index: 0, loaded: false, loadedPct: 0, }
+  state = { index: 0, loaded: false, loadedPct: 0 }
+  loadedPct = 0
 
   componentDidMount() {
     TweenMax.set(this.preloaderNode.querySelector('.bar'), {
       width: 0,
     })
   }
-  
+
   next = () => {
-    this.setState({
-      index: Math.min(
-        this.state.index + 1,
-        this.props.data.allMarkdownRemark.edges.length - 1
-      )
-    }, () => {
-      TweenMax.to(this.titleNode, 0.5, {
-        text: { value: this.props.data.allMarkdownRemark.edges[this.state.index].node.frontmatter.title,
-        delimiter: ' ',}
-      })
-    })
-    
+    this.setState(
+      {
+        index: Math.min(
+          this.state.index + 1,
+          this.props.data.allMarkdownRemark.edges.length - 1
+        ),
+      },
+      () => {
+        TweenMax.to(this.titleNode, 0.5, {
+          text: {
+            value: this.props.data.allMarkdownRemark.edges[this.state.index]
+              .node.frontmatter.title,
+            delimiter: ' ',
+          },
+        })
+      }
+    )
   }
 
   prev = () => {
-    this.setState({
-      index: Math.max(this.state.index - 1, 0),
-    }, () => {
-      TweenMax.to(this.titleNode, 0.5, {
-        text: { value: this.props.data.allMarkdownRemark.edges[this.state.index].node.frontmatter.title,
-        delimiter: ' ',}
-      })
-    })
-    // TweenMax.to(this.preloaderNode.querySelector('.text'), 0.5, {
-    //   text: loaded / (total + 1) * 100 + '%',
-    // })
+    this.setState(
+      {
+        index: Math.max(this.state.index - 1, 0),
+      },
+      () => {
+        TweenMax.to(this.titleNode, 0.5, {
+          text: {
+            value: this.props.data.allMarkdownRemark.edges[this.state.index]
+              .node.frontmatter.title,
+            delimiter: ' ',
+          },
+        })
+      }
+    )
   }
 
   onPreloadProgress = (loaded, total) => {
-    console.log('loaded', loaded, total)
     if (loaded === total) {
-      setTimeout(() => {
-        this.setState({
-          loaded: loaded === total,
-        })
-        TweenMax.to(this.preloaderNode, 1, {
-          opacity: 0,
-        })
-      }, 500)
+      TweenMax.to(this.preloaderNode, 1, {
+        x: '100%',
+        delay: 1.5,
+        onComplete: () => {
+          this.setState({
+            loaded: loaded === total,
+          })
+        },
+      })
     }
-
     TweenMax.to(this.preloaderNode.querySelector('.bar'), 1, {
-      width: loaded / total * 100 + '%',
+      width: (loaded / total) * 100 + '%',
     })
-    TweenMax.to(this.preloaderNode.querySelector('.text'), 1, {
-      text: loaded / (total + 1) * 100 + '%',
-    })
+    // TweenMax.to(this.loadedPct, 1, {
+    //   value: (loaded / total) * 100 + '%',
+    // })
   }
 
   render() {
@@ -98,18 +106,21 @@ class WorksLayout extends React.Component {
                   top: '50%',
                   height: '50vh',
                 }}
-                ref={el => this.preloaderNode = el} 
+                ref={el => (this.preloaderNode = el)}
               >
-                <div className="near-white f7 tracked ttu fw8 nt3 text tc w-100">
-                </div>
-                <div className="absolute left-0 bg-white bar" style={{
-                  height: 1,
-                }}>
-
-                </div>
+                <div
+                  className="near-white f7 tracked ttu fw8 nt3 text tc w-100"
+                  ref={el => (this.preloaderLabel = el)}
+                />
+                <div
+                  className="absolute left-0 bg-white bar"
+                  style={{
+                    height: 1,
+                  }}
+                />
               </div>
             }
-            {this.state.loaded && !showDetail && (
+            {!showDetail && (
               <div
                 className="absolute w-100 top-0 left-0 z-9999"
                 style={{
@@ -127,7 +138,11 @@ class WorksLayout extends React.Component {
                       .toLowerCase()
                   }
                 >
-                  <h2 className="absolute bottom-0 nt4 ma0-ns pa0 f5 f4-l" style={{ bottom: '10%' }} ref={el => this.titleNode = el}>
+                  <h2
+                    className="absolute bottom-0 nt4 ma0-ns pa0 f5 f4-l"
+                    style={{ bottom: '10%' }}
+                    ref={el => (this.titleNode = el)}
+                  >
                     {/* {works[this.state.index].node.frontmatter.title} */}
                   </h2>
                 </Link>
@@ -145,7 +160,7 @@ class WorksLayout extends React.Component {
                 appear
                 mountOnEnter
                 in={showControls}
-                onEnter={(node) => {
+                onEnter={node => {
                   TweenMax.set(node, {
                     autoAlpha: 0,
                     y: 30,
@@ -198,18 +213,18 @@ class WorksLayout extends React.Component {
                   {
                     // y: 0,
                     opacity: 1,
-                    delay: 0.1,
+                    delay: 0.5,
                   },
-                  0.1
+                  0.2
                 )
                 TweenMax.staggerTo(
                   textCover,
-                  0.75,
+                  0.6,
                   {
                     x: '101%',
-                    delay: 0.2,
+                    delay: 0.7,
                   },
-                  0.1
+                  0.2
                 )
               }}
               onExit={node => {
@@ -217,19 +232,20 @@ class WorksLayout extends React.Component {
                 TweenMax.killTweensOf(node)
                 TweenMax.staggerTo(
                   fadeInElements,
-                  0.75,
+                  0.5,
                   {
                     // y: -30,
                     opacity: 0,
-                    delay: 0.1,
+                    delay: 0.4,
                   },
-                  -0.01,
+                  -0.01
                 )
                 TweenMax.staggerTo(
                   node.querySelectorAll('.text-cover'),
                   0.5,
                   {
                     x: '-101%',
+                    delay: 0.3,
                   },
                   -0.1
                 )

@@ -4,27 +4,27 @@ import { TimelineLite, TweenLite, TweenMax,
 const MAX_DISPLACEMENT = 6
 const timeline = new TimelineLite({ paused: true })
 
-const DEFAULT_PROPS = {
+const SLIDE_DEFAULT_STATE = {
   scale: 0.35,
-  alpha: 1,
+  alpha: 0,
   offsetY: 0,
 }
 
-const INITIAL_STATE = {
-  mouseX: 0, mouseY: 0, x: 0, displace: 0, displaceY: 0, props: [DEFAULT_PROPS],
+const SLIDER_INITIAL_STATE = {
+  mouseX: 0, mouseY: 0, x: 0, displace: 0, displaceY: 0, props: [SLIDE_DEFAULT_STATE],
+}
+
+const HOMEPAGE_DEFAULT_STATE = {
+  
 }
 
 const __state = {
-  slider: INITIAL_STATE,
-  project: {},
+  slider: SLIDER_INITIAL_STATE,
+  homepage: {},
 }
 
 export function setMeshProps(images) {
-  __state.slider.props = images.map((d, i) => ({
-    scale: 0.35,
-    alpha: 1,
-    offsetY: 0,
-  }))
+  __state.slider.props = images.map((d, i) => ({...SLIDE_DEFAULT_STATE}))
 }
 
 function tweenDisplace(fromIndex, toIndex, duration = 1, prop) {
@@ -50,6 +50,7 @@ export function slideTo({ fromIndex, toIndex }) {
 }
 
 export function openProject({ index }) {
+  console.log('open', index, __state.slider.props)
   TweenMax.to(__state.slider.props.filter((p, i) => i !== index), 1.0, {
     scale: 0,
     alpha: 0,
@@ -65,11 +66,21 @@ export function openProject({ index }) {
 }
 
 export function closeProject() {
+  console.log('close')
   TweenLite.to(__state.slider.props, 0.5, {
     scale: 0.35,
     alpha: 1,
     delay: 0.25,
-  }).play()
+  })
+  tweenDisplace(1, 0, 2, 'displaceY')
+}
+
+export function fadeInSlides() {
+  TweenMax.staggerTo(__state.slider.props, 1.0, {
+    scale: 0.35,
+    alpha: 1,
+    delay: 1.0,
+  }, 0.2)
   tweenDisplace(1, 0, 2, 'displaceY')
 }
 
