@@ -196,7 +196,6 @@ class WorksLayout extends React.Component {
                     style={{
                       transform: 'translateY(-50%)',
                       top: '50%',
-                      height: '50vh',
                     }}
                     ref={el => (this.preloaderNode = el)}
                   >
