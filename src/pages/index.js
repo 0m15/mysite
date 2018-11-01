@@ -9,8 +9,8 @@ class IndexPage extends React.Component {
       <div className="white absolute w-100 z-999">
         <div className="pt6 mw8 ph4 center f4 fade">
           <TextCover coverColor='near-black' text='digital designer &amp; coder' /><br/>
-          <TextCover coverColor='near-black' text='works 2014—2018.' />{' '}
-          <a className="white hover" href="mailto:simonecarella@gmail.com"><TextCover coverColor='near-black' text='contact me here.' /></a>
+          <TextCover coverColor='near-black' text='works 2014—2018.' />{' '}<br/>
+          <a className="white hover" href="mailto:simonecarella@gmail.com"><TextCover coverColor='near-black' text='email me' /></a>
           {/* <p className="fade o-0 hidden">
             lorem ipsum dolor
           </p> */}

@@ -34,7 +34,9 @@ class WorkLayout extends React.Component {
                 }}
               >
                 <h2 className="ma0 pa0 f1 serif fw1">
-                  <TextCover text={node.frontmatter.title} />
+                  {node.frontmatter.title.split('').map((t, i) =>
+                    <span key={i} className="text-split">{t}</span>
+                  )}
                 </h2>
                 <div className="ml-auto" />
               </div>

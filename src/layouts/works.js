@@ -33,7 +33,6 @@ class WorksLayout extends React.Component {
         (this.dragger[0].x / this.dragger[0].maxX) * (this.props.data.allMarkdownRemark.edges.length - 1)
       )
     )
-    console.log('snap', snap)
     this.setState(
       {
         index: snap,
@@ -53,61 +52,10 @@ class WorksLayout extends React.Component {
     })
   }
 
-  next = () => {
-    this.setState(
-      {
-        index: Math.min(
-          this.state.index + 1,
-          this.props.data.allMarkdownRemark.edges.length - 1
-        ),
-      },
-      () => {
-        TweenMax.to(this.titleNode, 0.5, {
-          text: {
-            value: this.props.data.allMarkdownRemark.edges[this.state.index]
-              .node.frontmatter.title,
-            delimiter: ' ',
-          },
-        })
-      }
-    )
-  }
-
-  prev = () => {
-    this.setState(
-      {
-        index: Math.max(this.state.index - 1, 0),
-      },
-      () => {
-        TweenMax.to(this.titleNode, 0.5, {
-          text: {
-            value: this.props.data.allMarkdownRemark.edges[this.state.index]
-              .node.frontmatter.title,
-            delimiter: ' ',
-          },
-        })
-      }
-    )
-  }
-
   onPreloadProgress = (loaded, total) => {
-    if (loaded === total) {
-      // TweenMax.to(this.preloaderNode.querySelector('.bar'), 1, {
-      //   x: '97%',
-      //   delay: 1.5,
-      //   onComplete: () => {
-      //     this.setState({
-      //       loaded: loaded === total,
-      //     })
-      //   },
-      // })
-    }
     TweenMax.to(this.preloaderNode.querySelector('.bar'), 1, {
       width: (loaded / total) * 100 + '%',
     })
-    // TweenMax.to(this.loadedPct, 1, {
-    //   value: (loaded / total) * 100 + '%',
-    // })
   }
 
   render() {
@@ -190,7 +138,8 @@ class WorksLayout extends React.Component {
                   })
                 }}
               >
-                <div className="relative mw8 center ph4">
+                <div className="mw8 center ph4">
+                  <div className="relative">
                   <div
                     className="absolute w-100 h-100 top-0 ph4 left-0 z-9999 white flex items-center justify-center"
                     style={{
@@ -221,17 +170,8 @@ class WorksLayout extends React.Component {
                       }}
                     />
                   </div>
-                </div>
-                {/* <div>
-                  <div className="center flex justify-center w-50 white">
-                    <div className="w-40 tc f7 pointer" onClick={this.prev}>
-                      Prev
-                    </div>
-                    <div className="w-40 tc f7 pointer" onClick={this.next}>
-                      Next
-                    </div>
                   </div>
-                </div> */}
+                </div>
               </Transition>
             </div>
           </div>
@@ -246,6 +186,7 @@ class WorksLayout extends React.Component {
               onEnter={node => {
                 const fadeElements = node.querySelectorAll('.fade')
                 const textCover = node.querySelectorAll('.text-cover')
+                const textSplit = node.querySelectorAll('.text-split')
                 TweenMax.killTweensOf(node)
                 TweenMax.set(fadeElements, {
                   // y: -30,
@@ -253,6 +194,11 @@ class WorksLayout extends React.Component {
                 })
                 TweenMax.set(textCover, {
                   x: '-101%',
+                })
+                TweenMax.set(textSplit, {
+                  opacity: 0,
+                  y: -20,
+                  scaleX: 1.5,
                 })
                 TweenMax.staggerTo(
                   fadeElements,
@@ -273,9 +219,30 @@ class WorksLayout extends React.Component {
                   },
                   0.2
                 )
+                TweenMax.staggerTo(
+                  textCover,
+                  0.6,
+                  {
+                    x: '101%',
+                    delay: 0.7,
+                  },
+                  0.2
+                )
+                TweenMax.staggerTo(
+                  textSplit,
+                  0.25,
+                  {
+                    opacity: 1,
+                    scaleX: 1,
+                    y: 0,
+                    delay: 0.6,
+                  },
+                  0.05
+                )
               }}
               onExit={node => {
                 const fadeInElements = node.querySelectorAll('.fade')
+                const textSplit = node.querySelectorAll('.text-split')
                 TweenMax.killTweensOf(node)
                 TweenMax.staggerTo(
                   fadeInElements,
@@ -295,6 +262,16 @@ class WorksLayout extends React.Component {
                     delay: 0.3,
                   },
                   -0.1
+                )
+                TweenMax.staggerTo(
+                  textSplit,
+                  0.25,
+                  {
+                    opacity: 0,
+                    scale: 1,
+                    y: 30,
+                  },
+                  -0.05
                 )
               }}
               // addEndListener={(node, done) => {
