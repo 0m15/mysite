@@ -48,8 +48,8 @@ class WorksLayout extends React.Component {
     const index =
       (this.dragger[0].x / this.dragger[0].maxX) * (this.props.data.allMarkdownRemark.edges.length - 1)
     drag({
-      fromIndex: 0,
       toIndex: index,
+      speed: this.dragger[0].deltaX,
     })
   }
 
@@ -190,9 +190,9 @@ class WorksLayout extends React.Component {
                   })
                 }}
               >
-                <div className="relative mw8 center">
+                <div className="relative mw8 center ph4">
                   <div
-                    className="absolute w-100 h-100 top-0 left-0 z-9999 white flex items-center justify-center"
+                    className="absolute w-100 h-100 top-0 ph4 left-0 z-9999 white flex items-center justify-center"
                     style={{
                       transform: 'translateY(-50%)',
                       top: '50%',

@@ -49,14 +49,16 @@ export function slideTo({ fromIndex, toIndex }) {
   tweenDisplace(fromIndex, toIndex, 1, 'displace')
 }
 
-export function drag({ fromIndex, toIndex }) {
+export function drag({ toIndex, speed }) {
   TweenMax.to(__state.slider, 0.5, {
     x: toIndex,
     ease: Power3.easeOut,
-    // onComplete: () => {
-    //   const round = Math.floor(toIndex)
-    //   drag({ fromIndex: toIndex, toIndex: round})
-    // }
+  })
+  TweenMax.to(__state.slider.props.filter((p, i) => i === Math.floor(toIndex)), 0.25, {
+    scale: 0.3,
+  })
+  TweenMax.to(__state.slider, 0.5, {
+    displaceY: speed * 0.5,
   })
 }
 
@@ -64,6 +66,12 @@ export function dragDecay(snap) {
   TweenMax.to(__state.slider, 1.0, {
     x: snap,
     ease: Power3.easeOut,
+  })
+  TweenMax.to(__state.slider.props, 0.25, {
+    scale: 0.35,
+  })
+  TweenMax.to(__state.slider, 0.25, {
+    displaceY: 0,
   })
 }
 

@@ -3,7 +3,6 @@ import { Link } from 'gatsby'
 import Helmet from 'react-helmet'
 import TextCover from '../components/text-cover'
 
-
 class WorkLayout extends React.Component {
   render() {
     const { children, data, pageContext, ...rest } = this.props
@@ -11,76 +10,67 @@ class WorkLayout extends React.Component {
     return (
       <>
         <Helmet title={node.frontmatter.title} />
-        <div>
-          <div
-            className="absolute w-100 left-0 pb4 work-detail z-9999"
-            style={{
-              top: '80%',
-            }}
-          >
-            <div
-              className="white fade"
-              style={{
-                height: '20vh',
-              }}
-            >
-              <div className="mw8 center ph4 relative z-9999">
-                <div
-                  className="absolute flex items-center w-100 ph4 top-0 left-0 z-9999"
-                  style={{
-                    transform: 'translateY(-100%)',
-                    top: '0',
-                    height: '50vh',
-                  }}
-                >
-                    <h2 className="ma0 pa0 f1 serif fw1">
-                      <TextCover text={node.frontmatter.title} />
-                    </h2>
-                    <div className="ml-auto">
-                      <Link className="white fw8" to={pageContext.nextUrl}>Next Project</Link>
-                    </div>
-                </div>
-                {/* <h2 className="f4 ma0 pb3">
-                  <span className="dib relative overflow-hidden">
-                    <span className="fade">{node.frontmatter.title}</span>
-                    <div
-                      className="absolute left-0 w-100 h-100 top-0 bg-white text-cover"
-                      style={{
-                        mixBlendMode: 'difference',
-                      }}
-                    />
-                  </span>
-                </h2> */}
-                <div className="flex f7">
-                  <div className="w-third f7">
-                    {node.frontmatter.type.split(',').map((t, i) => {
-                      return <React.Fragment key={i}>
-                        <TextCover text={t} />
-                          {i < node.frontmatter.type.split(',').length -1  && <br />}
-                        </React.Fragment>
-                    })}
-                  </div>
-                  <div className="w-third fade tc">
-                    <span className="dib relative overflow-hidden">
-                      <span className="fade">Year: 2018</span>
-                      <div className="absolute left-0 w-100 h-100 top-0 bg-white text-cover" />
-                    </span>
-                  </div>
-                  <div className="w-third fade tr">
-                    <span className="dib relative overflow-hidden">
-                      <span className="fade">
-                        {node.frontmatter.url ? 'View Project' : ''}
-                      </span>
-                      <div className="absolute left-0 w-100 h-100 top-0 bg-white text-cover" />
-                    </span>
-                  </div>
+        <div
+          className="absolute w-100 top-0 left-0 pb4 work-detail z-999 vh-100 white"
+        >
+          <div className="mw8 center ph4 flex flex-column justify-center h-100">
+            <div className="fade absolute top-0 f4" style={{ top: '25%', }}>
+              <Link className="white mr3 no-underline" style={{ marginLeft: -30 }} to={'/'}>
+              ← All projects
+              </Link>
+              /
+              <Link className="white ml3 no-underline" to={pageContext.nextUrl}>
+                    Next Project
+                  </Link>
+            </div>
+            <div>
+              <div
+                className="flex items-center"
+                style={{
+                  // transform: 'translateY(-100%)',
+                  height: '50vh',
+                }}
+              >
+                <h2 className="ma0 pa0 f1 serif fw1">
+                  <TextCover text={node.frontmatter.title} />
+                </h2>
+                <div className="ml-auto">
+                  
                 </div>
               </div>
-              {/* <div className="tc f7 o-10 absolute bottom-0 white w-100 pb4 fw8">
-              Scroll
-            </div> */}
             </div>
-            {/* <div
+            <div className="flex f7">
+              <div className="w-third f7">
+                {node.frontmatter.type.split(',').map((t, i) => {
+                  return (
+                    <React.Fragment key={i}>
+                      <TextCover text={t} />
+                      {i < node.frontmatter.type.split(',').length - 1 && (
+                        <br />
+                      )}
+                    </React.Fragment>
+                  )
+                })}
+              </div>
+              <div className="w-third fade tc">
+                <span className="dib relative overflow-hidden">
+                  <span className="fade">Year: 2018</span>
+                  <div className="absolute left-0 w-100 h-100 top-0 bg-white text-cover" />
+                </span>
+              </div>
+              <div className="w-third fade tr">
+                <span className="dib relative overflow-hidden">
+                  <span className="fade">
+                    {node.frontmatter.url ? 'View Project' : ''}
+                  </span>
+                  <div className="absolute left-0 w-100 h-100 top-0 bg-white text-cover" />
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* <div
               className="bg-white pt5"
               style={{
                 minHeight: '100vh',
@@ -99,8 +89,6 @@ class WorkLayout extends React.Component {
                 </div>
               </div>
             </div> */}
-          </div>
-        </div>
       </>
     )
   }
