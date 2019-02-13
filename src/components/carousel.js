@@ -13,7 +13,7 @@ import {
   setMeshProps,
   fadeInSlides,
 } from '../utils/choreography'
-import { getFragmentDefinition } from 'apollo-utilities';
+import { getFragmentDefinition } from 'apollo-utilities'
 
 const mouse = mouseChange()
 const sliderState = state.slider
@@ -30,7 +30,10 @@ class Carousel extends React.Component {
 
   componentDidMount() {
     const images = this.props.images // .map(img => loadImage(img.url))
-    
+
+    this.canvas.style.width = window.innerWidth + 'px'
+    this.canvas.style.height = window.innerHeight + 'px'
+
     const preload = async () => {
       const loaded = []
       let i = 1
@@ -41,18 +44,19 @@ class Carousel extends React.Component {
         i++
       }
       return loaded
-    }    
-    
-    preload().then((loaded) => {
+    }
+
+    preload().then(loaded => {
       this.renderGl(loaded)
       if (this.props.selectedIndex !== undefined) {
         openProject({
           index: this.props.selectedIndex,
+          delay: 0.2,
         })
       } else {
         fadeInSlides()
       }
-    })    
+    })
   }
 
   componentWillUnmount() {
@@ -83,13 +87,14 @@ class Carousel extends React.Component {
       nextProps.selectedIndex === undefined &&
       this.props.selectedIndex !== undefined
     ) {
-      closeProject()
+      closeProject(this.props.selectedIndex)
     }
   }
 
   renderGl = images => {
     const regl = (this.regl = _regl({
       pixelRatio: 1,
+      // canvas: this.canvas,
     }))
     const meshes = images.map(img => ({
       texture: regl.texture({
@@ -100,124 +105,107 @@ class Carousel extends React.Component {
       }),
     }))
 
-    const feedBackTexture = regl.texture({
-      copy: true,
-      min: 'linear',
-      mag: 'linear',
-    })
+    // const feedBackTexture = regl.texture({
+    //   copy: true,
+    //   min: 'linear',
+    //   mag: 'linear',
+    // })
 
-    const drawFeedback = regl({
-      frag: `
-      precision lowp float;
-      uniform sampler2D tInput;
-      varying vec2 uv;
+    // const drawFeedback = regl({
+    //   frag: `
+    //   precision mediump float;
+    //   uniform sampler2D tInput;
+    //   varying vec2 uv;
 
-      vec2 barrelDistortion(vec2 coord, float amt) {
-        vec2 cc = coord - 0.5;
-        float dist = dot(cc, cc);
-        return coord + cc * dist * amt;
-      }
+    //   vec2 barrelDistortion(vec2 coord, float amt) {
+    //     vec2 cc = coord - 0.5;
+    //     float dist = dot(cc, cc);
+    //     return coord + cc * dist * amt;
+    //   }
       
-      float sat( float t ) {
-        return clamp( t, 0.0, 1.0 );
-      }
+    //   float sat( float t ) {
+    //     return clamp( t, 0.0, 1.0 );
+    //   }
       
-      float linterp( float t ) {
-        return sat( 1.0 - abs( 2.0 * t - 1.0 ) );
-      }
+    //   float linterp( float t ) {
+    //     return sat( 1.0 - abs( 2.0 * t - 1.0 ) );
+    //   }
       
-      float remap( float t, float a, float b ) {
-        return sat( (t - a) / (b - a) );
-      }
+    //   float remap( float t, float a, float b ) {
+    //     return sat( (t - a) / (b - a) );
+    //   }
       
-      vec4 spectrum_offset( float t ) {
-        vec4 ret;
-        float lo = step(t, 0.5);
-        float hi = 1.0 - lo;
-        float w = linterp( remap( t, 1.0/6.0, 5.0/6.0 ) );
-        ret = vec4(lo,1.0,hi, 1.) * vec4(1.0-w, w, 1.0-w, 1.);
+    //   vec4 spectrum_offset( float t ) {
+    //     vec4 ret;
+    //     float lo = step(t, 0.5);
+    //     float hi = 1.0 - lo;
+    //     float w = linterp( remap( t, 1.0/6.0, 5.0/6.0 ) );
+    //     ret = vec4(lo,1.0,hi, 1.) * vec4(1.0-w, w, 1.0-w, 1.);
       
-        return pow( ret, vec4(1.0/2.2) );
-      }
+    //     return pow( ret, vec4(1.0/2.2) );
+    //   }
 
-      vec4 barrel_blur() {
-        // vec2 uv=(gl_FragCoord.xy/resolution.xy*.5)+.25;
-        vec4 a1=texture2D(tInput, barrelDistortion(uv,0.0));
-        vec4 a2=texture2D(tInput, barrelDistortion(uv,0.2));
-        vec4 a3=texture2D(tInput, barrelDistortion(uv,0.4));
-        vec4 a4=texture2D(tInput, barrelDistortion(uv,0.6));
-        
-        vec4 a5=texture2D(tInput, barrelDistortion(uv,0.8));
-        vec4 a6=texture2D(tInput, barrelDistortion(uv,1.0));
-        vec4 a7=texture2D(tInput, barrelDistortion(uv,1.2));
-        vec4 a8=texture2D(tInput, barrelDistortion(uv,1.4));
-        
-        vec4 a9=texture2D(tInput, barrelDistortion(uv,1.6));
-        vec4 a10=texture2D(tInput, barrelDistortion(uv,1.8));
-        vec4 a11=texture2D(tInput, barrelDistortion(uv,2.0));
-        vec4 a12=texture2D(tInput, barrelDistortion(uv,2.2));
+    //   void main () {
+    //     vec2 warp = uv;
+    //     vec3 color = texture2D(tInput, warp).rgb;
+    //     // vec4 blurred = barrel_blur();
+    //     gl_FragColor = vec4(blurred.rgb, blurred.a - 0.4); //vec4(color.r, color.g, color.b, 0.5);
+    //     // gl_FragColor = vec4(texture2D(tInput, warp).rgb, 0.2);
+    //   }
+    //   `,
 
-        vec4 tx=(a1+a2+a3+a4+a5+a6+a7+a8+a9+a10+a11+a12)/12.;
-        return tx;
-      }
+    //   vert: `
+    //   precision mediump float;
+    //   attribute vec2 position;
+    //   varying vec2 uv;
+    //   void main () {
+    //     uv = position;
+    //     gl_Position = vec4(2.0 * position - 1.0, 0, 1);
+    //   }`,
 
-      void main () {
-        vec2 warp = uv;
-        vec3 color = texture2D(tInput, warp).rgb;
-        vec4 blurred = barrel_blur();
-        gl_FragColor = vec4(blurred.rgb, blurred.a - 0.4); //vec4(color.r, color.g, color.b, 0.5);
-        // gl_FragColor = vec4(texture2D(tInput, warp).rgb, 0.2);
-      }
-      `,
+    //   attributes: {
+    //     position: [-2, 0, 0, -2, 2, 2],
+    //   },
 
-      vert: `
-      precision lowp float;
-      attribute vec2 position;
-      varying vec2 uv;
-      void main () {
-        uv = position;
-        gl_Position = vec4(2.0 * position - 1.0, 0, 1);
-      }`,
+    //   uniforms: {
+    //     tInput: feedBackTexture,
+    //     t: ({ tick }) => 0.001 * tick,
+    //   },
 
-      attributes: {
-        position: [-2, 0, 0, -2, 2, 2],
-      },
+    //   depth: { enable: false },
 
-      uniforms: {
-        tInput: feedBackTexture,
-        t: ({ tick }) => 0.001 * tick,
-      },
+    //   blend: {
+    //     enable: true,
+    //     func: {
+    //       srcRGB: 'src alpha',
+    //       srcAlpha: 1,
+    //       dstRGB: 'one minus src alpha',
+    //       dstAlpha: 1,
+    //     },
+    //     equation: {
+    //       rgb: 'subtract',
+    //       alpha: 'add',
+    //     },
+    //   },
 
-      depth: { enable: false },
-
-      blend: {
-        enable: true,
-        func: {
-          srcRGB: 'src alpha',
-          srcAlpha: 1,
-          dstRGB: 'one minus src alpha',
-          dstAlpha: 1,
-        },
-        equation: {
-          rgb: 'subtract',
-          alpha: 'add',
-        },
-      },
-
-      count: 3,
-    })
+    //   count: 3,
+    // })
 
     const drawImg = regl({
-      vert: `
-      precision lowp float;
+      vert: ```
+      precision mediump float;
       attribute vec2 position;
+      uniform vec2 texCoords;
       uniform mat4 matrix;
+      uniform vec2 mouse;
       varying vec2 uv;
+      varying vec2 vTexCoords;
 
-      float barrelPower = 1.1;
-      
+      float barrelPower = 1.0;
+      vec2 mouseOffset = vec2(mouse.x, mouse.y);
+
       vec4 distort(vec4 p) {
-        vec2 v = p.xy * p.w;
+        vec2 v = p.xy;
         // Convert to polar coords:
         float radius = length(v);
         
@@ -230,25 +218,25 @@ class Carousel extends React.Component {
           // Convert back to Cartesian:
           v.x = radius * cos(theta);
           v.y = radius * sin(theta);
-          p.xy = v.xy * 1.0;
+          p.xy = v.xy;
         }
         return p;
       }
 
       void main () {
         uv = position.xy * .5 + .5;
+        vTexCoords = texCoords.xy * .5 + .5;
         // float dist = sin(uv.y * 3.14 + t * 0.1) * 0.02;
-        vec2 pos = vec2(position.x, position.y);
+        vec2 pos = position;
         gl_Position = distort(matrix * vec4(pos, 0, 1));
         // gl_Position = matrix * vec4(position, 0, 1);
-      }`,
+      }```,
       frag: `
-        precision lowp float;
+        precision mediump float;
         uniform sampler2D texture;
         uniform vec2 resolution;
         uniform float t;
         uniform float mousewheel;
-        uniform float u_noise;
         uniform float u_alpha;
         uniform float u_displacement;
         uniform float u_displacementY;
@@ -256,13 +244,15 @@ class Carousel extends React.Component {
         uniform float u_speed;  
         varying vec2 uv;
         varying float v_rand;
+        varying vec2 vTexCoords;
 
-        float cubicPulse( float c, float w, float x ){
-          x = abs(x - c);
-          if( x > w ) return 0.0;
-          x /= w;
-          return 1.0 - x * x * (3.0 - 2.0 * x);
-        }
+
+        // float cubicPulse( float c, float w, float x ){
+        //   x = abs(x - c);
+        //   if( x > w ) return 0.0;
+        //   x /= w;
+        //   return 1.0 - x * x * (3.0 - 2.0 * x);
+        // }
 
         vec2 barrelDistortion(vec2 coord, float amt) {
           vec2 cc = coord - 0.5;
@@ -286,51 +276,32 @@ class Carousel extends React.Component {
           vec4 ret;
           float lo = step(t, 0.5);
           float hi = 1.0 - lo;
-          float w = linterp( remap( t, 1.0/6.0, 5.0/6.0 ) );
-          ret = vec4(lo,1.0,hi, 1.) * vec4(1.0-w, w, 1.0-w, 1.);
+          float w = linterp( remap( t, 1.0 / 100.0, 5.0 / 6.0 ) );
+          ret = vec4(lo, 1.0, hi, 1.) * vec4(1.0 - w, w, 1.0-w, 1.);
         
-          return pow( ret, vec4(1.0/2.2) );
+          return pow( ret, vec4(1.0 / 2.2) );
         }
 
-        vec4 barrel_blur() {
-          // vec2 uv=(gl_FragCoord.xy/resolution.xy*.5)+.25;
-          vec4 a1=texture2D(texture, barrelDistortion(uv,0.0));
-          vec4 a2=texture2D(texture, barrelDistortion(uv,0.2));
-          vec4 a3=texture2D(texture, barrelDistortion(uv,0.4));
-          vec4 a4=texture2D(texture, barrelDistortion(uv,0.6));
-          
-          vec4 a5=texture2D(texture, barrelDistortion(uv,0.8));
-          vec4 a6=texture2D(texture, barrelDistortion(uv,1.0));
-          vec4 a7=texture2D(texture, barrelDistortion(uv,1.2));
-          vec4 a8=texture2D(texture, barrelDistortion(uv,1.4));
-          
-          vec4 a9=texture2D(texture, barrelDistortion(uv,1.6));
-          vec4 a10=texture2D(texture, barrelDistortion(uv,1.8));
-          vec4 a11=texture2D(texture, barrelDistortion(uv,2.0));
-          vec4 a12=texture2D(texture, barrelDistortion(uv,2.2));
-
-          vec4 tx=(a1+a2+a3+a4+a5+a6+a7+a8+a9+a10+a11+a12)/12.;
-          return tx;
-        }
-        
-        vec2 mouseOffset = vec2(mouse.x, mouse.y);
-
-        const float max_distort = 0.125;
-        const int num_iter = 8;
+        vec2 mouseOffset = 0.5 + vec2(mouse.x, mouse.y);
+        const float max_distort = 0.25;
+        const int num_iter = 6;
         const float reci_num_iter_f = 1.0 / float(num_iter);
 
         void main () {
           vec4 sumcol = vec4(0.0);
           vec4 sumw = vec4(0.0);	
-          for ( int i=0; i<num_iter;++i )
+          float dist = 1.0 - length(mouseOffset - uv);
+          for ( int i=0; i < num_iter; ++i )
           {
             float tt = float(i) * reci_num_iter_f;
             vec4 w = spectrum_offset( tt );
             sumw += w;
-            sumcol += w * texture2D( texture, barrelDistortion(barrelDistortion(uv, u_displacementY * 0.1), .6 * max_distort * tt * u_displacementY ) );
+            sumcol += w * texture2D( texture, 
+              barrelDistortion(vTexCoords, 0.6 * max_distort * tt * dist * (u_displacementY + 3.0))
+            );
           }
+
           
-          // vec4 blur = barrelBlur();
           gl_FragColor = vec4((sumcol / sumw).rgb, u_alpha);
         }`,
       attributes: {
@@ -339,6 +310,7 @@ class Carousel extends React.Component {
 
       uniforms: {
         texture: regl.prop('texture'),
+        texCoords: [0, 0, 0, 0.5, 1, 0.5, 1, 0.5],
         matrix: regl.prop('matrix'),
         u_displacement: regl.prop('u_displacement'),
         u_displacementY: regl.prop('u_displacementY'),
@@ -355,19 +327,20 @@ class Carousel extends React.Component {
         mouse: ({ pixelRatio, viewportHeight, viewportWidth }) => {
           let x = 0.5 - mouse.x / window.innerWidth
           let y = 0.5 - mouse.y / window.innerHeight
-          
+
           requestAnimationFrame(() => {
-            TweenMax.to(sliderState, 1, {
+            TweenMax.to(sliderState, 2, {
               mouseX: x,
               mouseY: y,
-              ease: Back.easeOut,
-            }).play()
+              ease: Power3.easeOut,
+            })
           })
+
           return [sliderState.mouseX, sliderState.mouseY]
         },
-        mousewheel: () => {
-          return 0
-        },
+        // mousewheel: () => {
+        //   return 0
+        // },
       },
       depth: {
         enable: false,
@@ -388,49 +361,52 @@ class Carousel extends React.Component {
       },
       count: 6,
     })
-    
+
     regl.frame(({ time, ...props }) => {
       regl.clear({
-        color: [0, 0, 0, 0],
+        // color: [0, 0, 0, 0],
         depth: 1,
       })
       // drawFeedback()
       drawImg(
-        meshes.map((mesh, i) => {
-          const meshProps = sliderState.props[i]
-          return {
-            texture: mesh.texture,
-            u_text: mesh.text,
-            u_speed: 0.1,
-            u_displacement: sliderState.displace,
-            u_displacementY: sliderState.displaceY,
-            u_alpha: meshProps.alpha,
-            u_noise: 4.0,
-            matrix: getMatrix({
-              image: images[i],
-              width: window.innerWidth,
-              height: window.innerHeight,
-              offset: [i, meshProps.offsetY],
-              scale: meshProps.scale,
-              pan: sliderState.x,
-              panSpeed: 1,
-              mode: 'contain',
-            }),
-          }
-        })
+        meshes
+          // .filter((m, i) => this.props.selectedIndex !== undefined ? i === this.props.selectedIndex : true)
+          .filter((m, i) => {
+            if (sliderState.x < 2) {
+              return i < 3
+            }
+            return i > sliderState.x - 2 && i < sliderState.x + 1
+          })
+          .map((mesh, i) => {
+            let k = i
+            if (i === 0 && sliderState.x >= 2) {
+              k = Math.floor(sliderState.x) - 1
+            }
+            if (i === 1 && sliderState.x >= 2) {
+              k = Math.floor(sliderState.x)
+            }
+            if (i === 2 && sliderState.x >= 2) {
+              k = Math.floor(sliderState.x) + 1
+            }
+            const meshProps = sliderState.props[k]
+            return {
+              texture: mesh.texture,
+              u_alpha: meshProps.alpha,
+              u_displacement: sliderState.displace,
+              u_displacementY: meshProps.displace,
+              matrix: getMatrix({
+                image: images[k],
+                width: window.innerWidth,
+                height: window.innerHeight,
+                offset: [k, meshProps.offsetY],
+                scale: meshProps.scale,
+                pan: sliderState.x,
+                panSpeed: 1,
+                mode: 'contain',
+              }),
+            }
+          })
       )
-
-      // drawText(
-      //   meshes.map((mesh,i) => {
-      //     return {
-      //       position: mesh.textMesh.positions,
-      //       elements: mesh.textMesh.cells,
-      //       u_offset: [i, 0],
-      //       u_pan: sliderState.x,
-      //     }
-      //   })
-      // )
-
       // feedBackTexture({
       //   copy: true,
       //   min: 'linear',
@@ -442,11 +418,9 @@ class Carousel extends React.Component {
   render() {
     return (
       <canvas
-        className="fixed bottom-0 left-0"
-        style={{
-          width: '100%',
-          height: '100%',
-        }}
+        className="absolute bottom-0 left-0"
+        width={this.props.selectedIndex ? 1200 : 600}
+        height={this.props.selectedIndex ? 650 : 325}
         ref={el => (this.canvas = el)}
       />
     )

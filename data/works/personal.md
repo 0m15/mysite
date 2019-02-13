@@ -2,11 +2,13 @@
 title: Personal projects
 order: 4
 cover: './images/songul.jpg'
-type: Front-end engineering
-url: http://hiddentribes.us
+type: Graphic design
+url: ''
 images: 
- - './images/ht.gif'
- - './images/ht.gif'
+ - './images/songul-large.jpg'
+ - './images/songul-large-w.jpg'
 ---
 
-Tools developed for data visualization, geospatial visualization, charts, dashboards.
+Poster designed for the Songül exhibition, by photographer and artist Serena Pea.<br/>
+The exhibition opening took place on November 21st, 2018 at the Nelumbo Open Project spaces in Bologna.
+

@@ -1,13 +1,6 @@
 import React, { Component } from 'react'
-import { TweenLite, TweenMax, Bounce, Elastic, Power2 } from 'gsap/all'
-import { scaleLinear } from 'd3-scale'
+import { TweenMax, Bounce, Elastic, Power2 } from 'gsap'
 import CustomEase from '../utils/CustomEase'
-import {
-  AnimatedValue,
-  animated,
-  Spring,
-  controller as spring,
-} from 'react-spring'
 
 const defaultSpring = {
   friction: 10,
@@ -25,11 +18,9 @@ class LayerConsumer extends Component {
   constructor(props) {
     super(props)
     this.scrollY = 0
+    this.totalScroll = 0
     this.scroll = null
     //nthis.scroll = new AnimatedValue(this.scrollY)
-    this.opacity = new AnimatedValue(
-      this.props.fade && !this.props.reverse ? 0 : 1
-    )
     this.overflow = false
     // this.scroll.addListener(this.onScroll)
 
@@ -51,6 +42,7 @@ class LayerConsumer extends Component {
     this.rect = this.node.getBoundingClientRect()
     this.s = Date.now()
     this.animate()
+    this.props.setHeight(this.rect.height)
   }
 
   scrollTo = scrollY => {
@@ -60,10 +52,18 @@ class LayerConsumer extends Component {
     // let topBoundary = 0
     let bottomBoundary = 0
 
+    
     // if (top !== undefined) {
     //   topBoundary = this.rect.top - top
     //   bottomBoundary = 0
     //   console.log('normalSpeedY', scrollY)
+    // }
+
+
+    // if (this.props.sticky && this.scrollY >= this.node.offsetTop || this.totalScroll > this.scrollY) {
+    //   console.log(this.totalScroll)
+    //   this.totalScroll = scrollY
+    //   return
     // }
 
     // clamp to boundaries
@@ -75,10 +75,10 @@ class LayerConsumer extends Component {
 
   animate = () => {
     requestAnimationFrame(() => {
-      TweenLite.to(this.node, this.props.delay ? 0.75 : 1, {
+      TweenMax.to(this.node, this.props.delay ? 0.75 : 1, {
         ease: this.props.delay ? 'CustomElastic' : Power2.easeOut,
         y: -this.scrollY,
-      }).play()
+      })
       
       if (this.props.fade) {
         const ratio = Math.min(
@@ -91,14 +91,14 @@ class LayerConsumer extends Component {
           )
         )
         const opacity = this.props.reverse ? 1 - ratio : ratio
-        // TweenLite.to(this.node, 1, {
+        // TweenMax.to(this.node, 1, {
         //     opacity,
         //   },
         // ).play()
         this.node.style.opacity = opacity
       }
       
-      // TweenLite.to(this.node, this.props.delay ? 0.75 : 1, {
+      // TweenMax.to(this.node, this.props.delay ? 0.75 : 1, {
       //   ease: this.props.delay ? 'CustomElastic' : Power2.easeOut,
       //   y: -this.scrollY,
       //   opacity,
@@ -139,10 +139,6 @@ class LayerConsumer extends Component {
             startValue + (event.clientY - startPosition) * this.props.speed * 4
           updateVelocity(event)
           this.scrollTo(currentScroll)
-          // spring(this.scroll, {
-          //   to: this.scrollY,
-          //   ...defaultSpring,
-          // }).start()
         })
       )
 
@@ -153,12 +149,6 @@ class LayerConsumer extends Component {
           updateVelocity(event)
           window.removeEventListener('touchmove', moveListener)
           window.removeEventListener('touchend', upListener)
-          spring
-            .decay(this.scroll, {
-              velocity,
-              deceleration: 1.1,
-            })
-            .start()
           this.onScrollEnd(currentScroll)
         })
       )
@@ -170,32 +160,34 @@ class LayerConsumer extends Component {
     const d = speed / scroller.props.maxSpeed
     const maxScroll = this.props.scroller.getHeight() - window.innerHeight
     if (value < -100) {
-      this.scroll.stopAnimation(value => {
-        this.overflow = true
-        this.scroll.removeAllListeners()
-        spring(this.scroll, {
-          to: 10,
-          ...defaultSpring,
-        }).start()
-      })
+      // this.scroll.stopAnimation(value => {
+      //   this.overflow = true
+      //   this.scroll.removeAllListeners()
+      // })
     }
     if (value > maxScroll * d + 100) {
       this.overflow = true
-      this.scroll.stopAnimation(value => {
-        this.scroll.removeAllListeners()
-        spring(this.scroll, {
-          to: maxScroll * d,
-          ...defaultSpring,
-        }).start()
-      })
+      // this.scroll.stopAnimation(value => {
+      //   this.scroll.removeAllListeners()
+      // })
     }
   }
 
   mousemove = evt => {}
 
   mousewheel = evt => {
-    evt.preventDefault()
+    // evt.preventDefault()
     const delta = evt.deltaY
+
+    // if (this.props.sticky && 
+    //   ((this.scrollY) >= this.node.offsetTop)) {
+    //   this.totalScroll += delta * this.props.speed
+    //   return
+    // }
+
+    // if (this.totalScroll > 0) {
+    //   return
+    // }
     this.scrollTo(this.scrollY + delta * this.props.speed)
     this.animate()
   }
@@ -249,8 +241,8 @@ export class Layer extends Component {
   render() {
     return (
       <ScrollerContext.Consumer>
-        {({ scroller }) => {
-          return <LayerConsumer {...this.props} scroller={scroller} />
+        {({ scroller, setHeight }) => {
+          return <LayerConsumer {...this.props} scroller={scroller} setHeight={setHeight} />
         }}
       </ScrollerContext.Consumer>
     )
@@ -259,14 +251,28 @@ export class Layer extends Component {
 
 class Scroller extends Component {
   layers = []
-  _height = 0
+  height = 0
   currentScroll = 0
 
   componentDidMount = () => {
-    this._height = this._node.getBoundingClientRect().height
+    setTimeout(() => {
+    this.height = this.node.getBoundingClientRect().height
+    // Array.from(this.node.children).reduce((a, b) => {
+    //   console.log('b', b.clientHeight, b)
+    //   return a + b.getBoundingClientRect().height
+    }, 0)
+    console.log('this.node.clientHeight', this.height)
+    // }, 500)
+    
+    // new window.ResizeObserver(() => {
+    //   console.log('resize')
+    //   this.height = this.node.clientHeight
+    //   console.log(this.height)
+    // }).observe(this.node)
     window.addEventListener('mousewheel', this.mousewheel)
   }
 
+  
   mousewheel = evt => {
     evt.preventDefault()
     this.currentScroll += evt.deltaY * this.props.maxSpeed
@@ -274,32 +280,38 @@ class Scroller extends Component {
   }
 
   scroll = () => {
-    requestAnimationFrame(() => {
-      // TweenLite.to(window, 1, {
-      //   // ease: 'CustomElastic',
-      //   scrollTo: {
-      //     y: this.currentScroll,
-      //     autoKill: true,
-      //   },
-      //   overwrite: 5,
-      // }).play()
-    })
+    // requestAnimationFrame(() => {
+    //   TweenMax.to(window, 1, {
+    //     // ease: 'CustomElastic',
+    //     scrollTo: {
+    //       y: this.currentScroll,
+    //       autoKill: true,
+    //     },
+    //     overwrite: 5,
+    //   }).play()
+    // })
   }
 
   getRef = el => {
     if (!el) return
-    this._node = el
+    this.node = el
   }
 
   getHeight() {
-    return this._height
+    console.log('this.node.clientHeight', this.height)
+    return this.height
+  }
+
+  setHeight = (childHeight) => {
+    // this.height = this.node.clientHeight
+    console.log('set height', this.height)
   }
 
   render() {
     return (
       <>
         <div ref={this.getRef}>
-          <ScrollerContext.Provider value={{ scroller: this }}>
+          <ScrollerContext.Provider value={{ scroller: this, setHeight: this.setHeight, currentScroll: this.currentScroll }}>
             {this.props.children}
           </ScrollerContext.Provider>
         </div>

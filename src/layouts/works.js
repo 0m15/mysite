@@ -7,9 +7,26 @@ import TextCover from '../components/text-cover'
 import { drag, dragDecay } from '../utils/choreography'
 
 class WorksLayout extends React.Component {
-  state = { index: 0, loaded: false, loadedPct: 0 }
-  loadedPct = 0
+  state = { index: 0, loaded: false }
 
+  constructor(props) {
+    super(props)
+    if (props.pageContext.node) {
+      this.state = {
+        index: props.data.allMarkdownRemark.edges.findIndex(d => d.node.id === props.pageContext.node.id)
+      }
+    }
+  }
+
+  componentWillReceiveProps = (nextProps) => {
+    if (nextProps.pageContext.node) {
+      this.setState({
+        index: this.props.data.allMarkdownRemark.edges.findIndex(d => d.node.id === nextProps.pageContext.node.id)
+      })
+    }
+  }
+  
+ 
   componentDidMount() {
     TweenMax.set(this.preloaderNode.querySelector('.bar'), {
       width: 0,
@@ -23,6 +40,10 @@ class WorksLayout extends React.Component {
         onDrag: this.onDrag,
         onDragEnd: this.onDragEnd,
       })
+      TweenMax.set(this.dragCursor, {
+        x: this.state.index * (this.dragger[0].maxX / this.props.data.allMarkdownRemark.edges.length),
+      })
+      this.dragger[0].update()
     }
   }
 
@@ -56,13 +77,20 @@ class WorksLayout extends React.Component {
     TweenMax.to(this.preloaderNode.querySelector('.bar'), 1, {
       width: (loaded / total) * 100 + '%',
     })
+
+    // if (this.props.pageContext.node && loaded === total) {
+    //   TweenMax.to(this.preloaderNode, 1, {
+    //     opacity: 0,
+    //   })
+    // }
   }
 
   render() {
     const { edges: works } = this.props.data.allMarkdownRemark
+    console.log('works', works)
     const images = works.map(({ node }) => {
       return {
-        url: node.frontmatter.cover.publicURL,
+        url: node.frontmatter.cover.childImageSharp.fluid.src,
         title: node.frontmatter.title,
       }
     })
@@ -79,7 +107,7 @@ class WorksLayout extends React.Component {
           <div className="ph5">
             <Slideshow
               ref={comp => (this.slideshow = comp)}
-              index={this.state.index}
+              index={typeof selectedIndex === 'number' ? selectedIndex : this.state.index}
               selectedIndex={selectedIndex}
               images={images}
               onPreloadProgress={this.onPreloadProgress}
@@ -128,13 +156,17 @@ class WorksLayout extends React.Component {
                     autoAlpha: 1,
                     y: 0,
                   })
-                }}
-                addEndListener={(node, done) => {
                   TweenMax.to(node, 1, {
-                    y: showControls ? 0 : 30,
-                    autoAlpha: showControls ? 1 : 0,
-                    onComplete: done,
-                    delay: showControls ? 0.5 : 0,
+                    y: 0,
+                    autoAlpha: 1,
+                    delay: 0.5,
+                  })
+                }}
+                onExit={node => {
+                  TweenMax.to(node, 1, {
+                    y: 30,
+                    autoAlpha: 0,
+                    delay: 0,
                   })
                 }}
               >
@@ -176,18 +208,24 @@ class WorksLayout extends React.Component {
             </div>
           </div>
         </div>
-        <div className="bg-white">
+        <div className="relative">
           <TransitionGroup appear>
             <Transition
               key={selectedIndex}
               mountOnEnter
               unmountOnExit
+              appear
               timeout={1000}
               onEnter={node => {
                 const fadeElements = node.querySelectorAll('.fade')
                 const textCover = node.querySelectorAll('.text-cover')
                 const textSplit = node.querySelectorAll('.text-split')
                 TweenMax.killTweensOf(node)
+                TweenMax.set(node, {
+                  // y: -30,
+                  position: 'absolute',
+                  width: '100%',
+                })
                 TweenMax.set(fadeElements, {
                   // y: -30,
                   opacity: 0,
@@ -198,47 +236,36 @@ class WorksLayout extends React.Component {
                 TweenMax.set(textSplit, {
                   opacity: 0,
                   y: -20,
-                  scaleX: 1.5,
                 })
                 TweenMax.staggerTo(
                   fadeElements,
-                  0.75,
+                  0.6,
                   {
                     // y: 0,
                     opacity: 1,
-                    delay: 0.5,
-                  },
-                  0.2
-                )
-                TweenMax.staggerTo(
-                  textCover,
-                  0.6,
-                  {
-                    x: '101%',
-                    delay: 0.7,
-                  },
-                  0.2
-                )
-                TweenMax.staggerTo(
-                  textCover,
-                  0.6,
-                  {
-                    x: '101%',
-                    delay: 0.7,
-                  },
-                  0.2
-                )
-                TweenMax.staggerTo(
-                  textSplit,
-                  0.25,
-                  {
-                    opacity: 1,
-                    scaleX: 1,
-                    y: 0,
                     delay: 0.6,
                   },
-                  0.05
+                  0.1
                 )
+                TweenMax.staggerTo(
+                  textCover,
+                  0.7,
+                  {
+                    x: '101%',
+                    delay: 0.65,
+                  },
+                  0.1
+                )
+                // TweenMax.staggerTo(
+                //   textSplit,
+                //   0.5,
+                //   {
+                //     opacity: 1,
+                //     y: 0,
+                //     delay: 0.6,
+                //   },
+                //   -0.05
+                // )
               }}
               onExit={node => {
                 const fadeInElements = node.querySelectorAll('.fade')
@@ -250,7 +277,7 @@ class WorksLayout extends React.Component {
                   {
                     // y: -30,
                     opacity: 0,
-                    delay: 0.4,
+                    delay: 0.1,
                   },
                   -0.01
                 )
@@ -259,20 +286,19 @@ class WorksLayout extends React.Component {
                   0.5,
                   {
                     x: '-101%',
-                    delay: 0.3,
+                    delay: 0,
                   },
                   -0.1
                 )
-                TweenMax.staggerTo(
-                  textSplit,
-                  0.25,
-                  {
-                    opacity: 0,
-                    scale: 1,
-                    y: 30,
-                  },
-                  -0.05
-                )
+                // TweenMax.staggerTo(
+                //   textSplit,
+                //   0.25,
+                //   {
+                //     opacity: 0,
+                //     y: 30,
+                //   },
+                //   -0.05
+                // )
               }}
               // addEndListener={(node, done) => {
               //   TweenMax.eventCallback("onComplete", () => {
@@ -317,8 +343,10 @@ export default props => (
                 cover {
                   publicURL
                   childImageSharp {
-                    fluid(maxWidth: 420, maxHeight: 420) {
-                      ...GatsbyImageSharpFluid
+                    fluid(maxWidth: 600) {
+                      src
+                      srcSet
+                      sizes
                     }
                   }
                 }

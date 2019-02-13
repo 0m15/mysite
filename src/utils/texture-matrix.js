@@ -11,7 +11,8 @@ export const getMatrix = ({
     panSpeed = 0.1,
   }) => {
     const canvasAspect = width / height
-    const imageAspect = image.width / image.height
+    //const imageAspect = image.width / image.height
+    const imageAspect = 1200 / 649
   
     let scaleY
     let scaleX

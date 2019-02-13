@@ -6,7 +6,7 @@ import './index.scss'
 
 const Layout = ({ children, data, ...rest }) => {
   return (
-    <div className="bg-near-black" style={{
+    <div className="" style={{
       minHeight: '100vh',
     }}>
       <Helmet
@@ -17,9 +17,9 @@ const Layout = ({ children, data, ...rest }) => {
         ]}
       />
       <Header siteTitle={'simc'} />
-      <WorksLayout {...rest}>
+      <div>
         {children}
-      </WorksLayout>
+      </div>
       {/* <Footer
           siteTitle={'simc'}
         /> */}

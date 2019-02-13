@@ -1,12 +1,15 @@
 ---
 title: Experiments
 order: 5
-cover: './images/pp.png'
+cover: './images/sprite.jpg'
 type: 3D, Blender
 url: ''
 images: 
- - './images/ht.gif'
- - './images/ht.gif'
+ - './images/pp.png'
+ - './images/pp.png'
+ - './images/pp.png'
+ - './images/pp.png'
+ - './images/pp.png'
 ---
 
 Tools developed for data visualization, geospatial visualization, charts, dashboards.
