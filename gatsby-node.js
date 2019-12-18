@@ -19,14 +19,15 @@ exports.createPages = ({ actions, graphql }) => {
           node {
             id
             excerpt(pruneLength: 5000)
+            html
             frontmatter {
               url
+              background
+              foreground
               title
+              slug
               type
               images {
-                publicURL
-              }
-              cover {
                 publicURL
               }
             }
@@ -47,8 +48,8 @@ exports.createPages = ({ actions, graphql }) => {
         ? edges[0].node
         : edges[index + 1].node
       
-      const path = node.frontmatter.title.replace(/\s/g, '-').toLowerCase()
-      const nextPath = nextNode.frontmatter.title.replace(/\s/g, '-').toLowerCase()
+      const path = node.frontmatter.slug//title.replace(/\s/g, '-').toLowerCase()
+      const nextPath = nextNode.frontmatter.slug//title.replace(/\s/g, '-').toLowerCase()
       
       console.log('[i] Creating page /works/' + path)
       createPage({

@@ -13,7 +13,6 @@ import {
   setMeshProps,
   fadeInSlides,
 } from '../utils/choreography'
-import { getFragmentDefinition } from 'apollo-utilities'
 
 const mouse = mouseChange()
 const sliderState = state.slider

@@ -3,6 +3,7 @@ import { Link } from 'gatsby'
 import Helmet from 'react-helmet'
 import TextCover from '../components/text-cover'
 import Scroller, { Layer } from '../components/scroller'
+import TextGlitch from '../components/textglitch'
 
 // class ImageScroller extends React.Component {
 //   componentDidMount = () => {
@@ -29,8 +30,37 @@ class WorkLayout extends React.Component {
     return (
       <>
         <Helmet title={node.frontmatter.title} />
-        <Scroller maxSpeed={0.7}>
-          <Layer speed={0.5}>
+        <div  style={{
+          background: node.frontmatter.background || '#fff',
+          color: node.frontmatter.foreground,
+        }}>
+        <div className="mw9 pt6 center ph4">
+          <div className="w-50">
+            <Link className="no-underline black f8 fw8" to="/works" style={{ 
+              color: 'inherit'
+            }}>
+              <TextGlitch val="xxx Back to works" />
+            </Link>
+            <h1>
+              <TextGlitch animateOnMount val={node.frontmatter.title} />
+            </h1>
+            <p
+              className="f7 lh-copy"
+              dangerouslySetInnerHTML={{ __html: node.html }}
+            />
+          </div>
+          <div className="w-100 pt7">
+            {(node.frontmatter.images||[]).map((image, i) => {
+              return (
+                <div key={i} className={(i) % 3 === 0 ? "tr w-50 ml-auto" : "w-50"}>
+                  <img src={image.publicURL} className="" />
+                </div>
+              )
+            })}
+          </div>
+        </div>
+        {/* <Scroller maxSpeed={0.7}>
+          <Layer>
             <div className="relative vh-100 pb4 near-white z-999">
               <div className="mw8 center ph4 flex flex-column justify-center h-100">
                 <div
@@ -40,7 +70,7 @@ class WorkLayout extends React.Component {
                     height: '50vh',
                   }}
                 >
-                  <Layer speed={0.1} delay>
+                  <Layer delay>
                     <h2 className="ma0 pa0 f1 serif fw1 overflow-hidden lh-title">
                       <div className="title fade">
                         {node.frontmatter.title}
@@ -96,7 +126,7 @@ class WorkLayout extends React.Component {
                   <Link
                     className="white mr3 no-underline"
                     style={{ marginLeft: -30 }}
-                    to={'/'}
+                    to={'/works'}
                   >
                     ← All projects
                   </Link>
@@ -128,7 +158,8 @@ class WorkLayout extends React.Component {
               </div>
             </div>
           </Layer>
-        </Scroller>
+        </Scroller> */}
+        </div>
       </>
     )
   }

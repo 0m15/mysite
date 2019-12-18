@@ -1,7 +1,7 @@
 module.exports = {
   siteMetadata: {
     title: 'simone carella',
-    siteUrl: '',
+    siteUrl: 'http://simonecarella.com',
   },
   plugins: [
     // 'gatsby-plugin-react-next',
