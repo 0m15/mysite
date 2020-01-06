@@ -1,7 +1,7 @@
 import React from 'react'
 
 const SYMBOLS = '@!$&%_>=-+06ͶΔБCRPTQПPXY'.split('')
-const vowels = 'aeiou'
+const vowels = ''
 
 export class S extends React.Component {
   constructor(props) {
@@ -80,6 +80,23 @@ export default class TextGlitch extends React.Component {
         animate: true,
       })
     }
+
+    if (this.props.auto) {
+      this.autoAnimate()
+    }
+  }
+
+  autoAnimate = () => {
+    this.setState({
+      animate: true,
+    })
+
+    setTimeout(() => {
+      this.setState({
+        animate: false,
+      })
+      this.autoAnimate()
+    }, 0.5 + Math.random() *5000)
   }
 
   onMouseEnter = () => {
@@ -100,7 +117,7 @@ export default class TextGlitch extends React.Component {
       <div
         onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
-        className="ttu"
+        className={this.props.className}
       >
         {val.split('').map((s, i) => (
           <S

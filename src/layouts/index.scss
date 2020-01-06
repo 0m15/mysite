@@ -1,16 +1,18 @@
 @import './variables.scss';
 @import '~tachyons-sass/tachyons.scss';
 @import url('https://fonts.googleapis.com/css?family=EB+Garamond:500,700');
+@import url('https://fonts.googleapis.com/css?family=Work+Sans:400:700');
 
 html,
 body {
-  font-family: $sans-serif;
+  font-family: Work Sans, Eb Garamond;
   -webkit-font-smoothing: antialiased;
   // overflow: hidden;
 }
 
+html,
+body,
 .serif {
-  font-family: 'EB Garamond';
 }
 
 .no-cursor {

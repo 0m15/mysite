@@ -36,24 +36,25 @@ class WorkLayout extends React.Component {
         }}>
         <div className="mw9 pt6 center ph4">
           <div className="w-50">
-            <Link className="no-underline black f8 fw8" to="/works" style={{ 
-              color: 'inherit'
+            <Link className="no-underline black f8 fw8 mb5 dib" to="/works" style={{ 
+              color: 'inherit',
+              marginLeft: -20,
             }}>
-              <TextGlitch val="xxx Back to works" />
+              <TextGlitch val="&larr; Back" />
             </Link>
             <h1>
               <TextGlitch animateOnMount val={node.frontmatter.title} />
             </h1>
             <p
-              className="f7 lh-copy"
+              className="f7 lh-copy mw6"
               dangerouslySetInnerHTML={{ __html: node.html }}
             />
           </div>
-          <div className="w-100 pt7">
+          <div className="w-100 pt7 flex flex-wrap">
             {(node.frontmatter.images||[]).map((image, i) => {
               return (
-                <div key={i} className={(i) % 3 === 0 ? "tr w-50 ml-auto" : "w-50"}>
-                  <img src={image.publicURL} className="" />
+                <div key={i} className={(i) % 3 === 0 ? "tr w-100" : "w-50"}>
+                  <div className="mr3"><img src={image.publicURL} className="mb3 db pr3" /></div>
                 </div>
               )
             })}
